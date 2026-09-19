@@ -1,0 +1,568 @@
+<title>The Self-Edge Leak</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+  :root {
+    --bg: #eceff3; --paper: #ffffff; --sunk: #f4f6f9;
+    --ink: #14181f; --ink-2: #3d4753; --muted: #6b7784;
+    --line: #d6dce3; --line-2: #e7ebef;
+    --accent: #2f4d8a;
+    --flag-fg: #8a5c0f; --flag-bg: #f7efdb; --flag-line: #e6d4ab;
+    --shadow: 0 1px 2px rgba(20,26,36,.05), 0 6px 22px rgba(20,26,36,.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1218; --paper: #171b22; --sunk: #1d222b;
+      --ink: #e8ecf2; --ink-2: #bac3cf; --muted: #8e99a6;
+      --line: #2a313b; --line-2: #222831;
+      --accent: #92b2ef;
+      --flag-fg: #d9a94f; --flag-bg: #2e2514; --flag-line: #4a3b1c;
+      --shadow: 0 1px 2px rgba(0,0,0,.35), 0 6px 24px rgba(0,0,0,.3);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1218; --paper: #171b22; --sunk: #1d222b;
+    --ink: #e8ecf2; --ink-2: #bac3cf; --muted: #8e99a6;
+    --line: #2a313b; --line-2: #222831;
+    --accent: #92b2ef;
+    --flag-fg: #d9a94f; --flag-bg: #2e2514; --flag-line: #4a3b1c;
+    --shadow: 0 1px 2px rgba(0,0,0,.35), 0 6px 24px rgba(0,0,0,.3);
+  }
+
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 16px; line-height: 1.62; -webkit-font-smoothing: antialiased;
+  }
+  .sheet {
+    max-width: 780px; margin: 0 auto; background: var(--paper);
+    padding-inline: clamp(20px, 5vw, 60px); padding-block: clamp(36px, 6vw, 64px) 80px;
+    border-inline: 1px solid var(--line); box-shadow: var(--shadow);
+  }
+  @media (max-width: 820px) { .sheet { border-inline: none; box-shadow: none; } }
+
+  h1 {
+    font-family: Spectral, Georgia, serif; font-weight: 600;
+    font-size: clamp(27px, 4.6vw, 38px); line-height: 1.16; letter-spacing: -.012em;
+    margin: 0 0 18px; text-wrap: balance;
+  }
+  h2 {
+    font-family: Spectral, Georgia, serif; font-weight: 600; font-size: 22px;
+    letter-spacing: -.004em; margin: 46px 0 12px; text-wrap: balance;
+  }
+  h2 .num { color: var(--muted); font-weight: 400; margin-right: .5em; font-variant-numeric: tabular-nums; }
+  h3 {
+    font-family: "IBM Plex Sans", sans-serif; font-weight: 600; font-size: 14px;
+    letter-spacing: .07em; text-transform: uppercase; color: var(--muted);
+    margin: 30px 0 10px;
+  }
+  p { margin: 0 0 15px; }
+  strong { font-weight: 600; color: var(--ink); }
+  em { font-style: italic; }
+
+  .byline {
+    font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12.5px;
+    color: var(--muted); margin: 0 0 26px; padding-bottom: 22px; border-bottom: 1px solid var(--line);
+  }
+  .note {
+    background: var(--sunk); border: 1px solid var(--line-2); border-radius: 3px;
+    padding: 16px 18px; margin: 0 0 30px; font-size: 14.5px; color: var(--ink-2);
+  }
+  .note strong { color: var(--ink); }
+  .lede { font-size: 17.5px; color: var(--ink-2); }
+
+  ol.findings { counter-reset: f; list-style: none; margin: 0 0 18px; padding: 0; }
+  ol.findings > li {
+    counter-increment: f; position: relative; padding-left: 34px; margin-bottom: 13px;
+    color: var(--ink-2);
+  }
+  ol.findings > li::before {
+    content: counter(f); position: absolute; left: 0; top: 1px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12.5px;
+    color: var(--accent); font-weight: 500;
+    width: 22px; height: 22px; line-height: 22px; text-align: center;
+    border: 1px solid var(--line); border-radius: 50%; background: var(--sunk);
+  }
+  ul.plain { margin: 0 0 16px; padding-left: 20px; color: var(--ink-2); }
+  ul.plain > li { margin-bottom: 11px; }
+
+  cite {
+    font-family: "IBM Plex Mono", ui-monospace, monospace; font-style: normal;
+    font-size: 12px; color: var(--muted); white-space: nowrap;
+  }
+  .flag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 11px;
+    font-weight: 500; letter-spacing: .05em; text-transform: uppercase;
+    color: var(--flag-fg); background: var(--flag-bg); border: 1px solid var(--flag-line);
+    border-radius: 2px; padding: 1px 6px; white-space: nowrap;
+  }
+
+  .tw { overflow-x: auto; margin: 0 0 20px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+  th, td { text-align: left; padding: 9px 14px 9px 0; border-bottom: 1px solid var(--line-2); }
+  th { font-weight: 600; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  td.n, th.n { text-align: right; font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; padding-right: 0; }
+  tbody tr:last-child td { border-bottom: none; }
+
+  pre {
+    background: var(--sunk); border: 1px solid var(--line-2); border-radius: 3px;
+    padding: 15px 17px; overflow-x: auto; margin: 0 0 16px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 13px; line-height: 1.7;
+    color: var(--ink-2);
+  }
+  code { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .89em; }
+  p code, li code, td code { background: var(--sunk); border: 1px solid var(--line-2); border-radius: 2px; padding: 0 4px; }
+
+
+  figure { margin: 26px 0 28px; }
+  figure svg { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+  figcaption { font-size: 13px; line-height: 1.55; color: var(--muted); margin-top: 11px; }
+  .dgm { color: var(--ink-2); }
+  .dgm text { fill: currentColor; font-family: "IBM Plex Sans", sans-serif; font-size: 12px; }
+  .dgm .lbl { font-size: 11px; letter-spacing: .04em; text-transform: uppercase; opacity: .75; }
+  .dgm .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 12.5px; }
+  .dgm .big { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 17px; }
+  .dgm .box { fill: var(--sunk); stroke: currentColor; stroke-opacity: .28; }
+  .dgm .ln { stroke: currentColor; fill: none; stroke-opacity: .55; }
+  .dgm .hot { color: var(--accent); }
+  .dgm .hot .box { fill: none; stroke: currentColor; stroke-opacity: 1; stroke-width: 1.6; }
+  .dgm .hot .ln { stroke-opacity: 1; stroke-width: 1.7; }
+  .dgm .dim { opacity: .38; }
+  .rule { border: 0; border-top: 1px solid var(--line); margin: 44px 0 0; }
+  footer { margin-top: 20px; font-size: 13.5px; color: var(--muted); }
+</style>
+
+<div class="sheet">
+
+<h1>What a transcription-factor activity benchmark actually measures</h1>
+
+<p class="byline">Draft · 2026-09-18 · september-play</p>
+
+<div class="note">
+  Each number traces to an <code>F-nnn</code> claim in <code>findings.md</code> and its <code>V-nnn</code> verdict; where a verdict split, the wording here is the verdict's, not the claim's. Claims still lacking a verdict are marked <span class="flag">unverified</span> in place.
+</div>
+
+<div class="note">
+  <strong>Denominators, because every rate depends on them.</strong> knockTF as <code>decoupler</code> fetches it is 388 experiments — its loader defaults to <code>thr_fc=-1</code>, silently keeping only those whose perturbed TF's own mRNA fell below −1, out of 907 <cite>(F-018/V-018)</cite>. Of those 388, <strong>279</strong> (155 TFs) get a ULM score at <code>tmin=5</code>; the other 109 are dropped because the TF is absent from CollecTRI (90) or has fewer than five measured targets (19). Unless stated otherwise, every rate below is over those 279. It is not a rate over knockTF <cite>(F-013/V-013)</cite>. Two other sets appear where named: the <strong>643</strong> scored experiments of the unfiltered file, and the <strong>106</strong> that support the study-context contrast.
+</div>
+
+<h2>Summary</h2>
+
+<p class="lede">Benchmarks for transcription-factor activity inference score a method by whether it recovers the TF that was perturbed. On the standard benchmark this rewards detecting the perturbed TF's <strong>own transcript</strong>. We quantify the channel that carries it and give the correction.</p>
+
+<ol class="findings">
+  <li>The perturbed TF's own log fold change <strong>alone</strong> ranks it in the top 10% in <strong>98%</strong> of the 279 experiments, against <strong>45%</strong> for ULM+CollecTRI. <cite>(F-001, F-013/V-013)</cite></li>
+  <li>For a univariate scorer the channel is <strong>one edge</strong>: the autoregulatory self-edge X→X. Deleting it reproduces masking the gene at top-10% — 96/279 either way — and accounts for 24% of ULM's hits. <cite>(F-010/V-010)</cite></li>
+  <li>Its width obeys a law. On the 227 TFs of a single-cell dataset that have a self-edge, a measured own gene and a surviving regulon, <code>log₁₀|Δscore| ≈ −0.53 − 0.46·log₁₀(size)</code>, Spearman −0.868, R² = 0.80 for the joint fit including a detection term. The −0.46 exponent is the 1/√n one gene contributes to a t-statistic. The leak is a <strong>product</strong> of that width and the own gene's discriminative signal. <cite>(F-027/V-027)</cite></li>
+  <li>Corrected, ULM+CollecTRI scores <strong>34%</strong> against a per-TF base rate of <strong>12%</strong> — real signal, about 2.8× chance, and about a quarter below the 45% an unmasked run on the same 279 experiments reports. <cite>(F-001/V-001, F-005, V-022)</cite></li>
+</ol>
+
+<p>A second, independent confound: <strong>study context</strong>. On the 106 experiments that support the contrast, under a symmetric mask, a TF reaches the top 10% in 22% of its own GEO series' other experiments — when a <em>different</em> TF was perturbed — against 14% in same-cell-line experiments from other series. <cite>(F-028/V-028)</cite></p>
+
+<h2><span class="num">1</span>The benchmark rewards abundance</h2>
+
+<figure>
+<svg class="dgm" viewBox="0 0 700 236" role="img" aria-label="A knockdown lowers a TF's own mRNA. One path reads that gene directly and scores 98 percent; the intended path infers from target genes and scores 45 percent.">
+<defs><marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+
+<rect class="box" x="8" y="96" width="132" height="46" rx="3"/>
+<text x="74" y="115" text-anchor="middle">TF knocked down</text>
+<text x="74" y="131" text-anchor="middle" class="mono" fill-opacity=".7">e.g. shRNA</text>
+<line class="ln" x1="140" y1="119" x2="188" y2="119" marker-end="url(#a1)"/>
+<rect class="box" x="190" y="96" width="140" height="46" rx="3"/>
+<text x="260" y="115" text-anchor="middle">its own mRNA falls</text>
+<text x="260" y="131" text-anchor="middle" class="mono" fill-opacity=".7">median −1.74</text>
+<path class="ln" d="M330 110 C 362 110, 362 52, 394 52" marker-end="url(#a1)"/>
+<path class="ln" d="M330 130 C 362 130, 362 190, 394 190" marker-end="url(#a1)"/>
+<g class="hot">
+  <rect class="box" x="396" y="30" width="150" height="44" rx="3"/>
+  <text x="471" y="49" text-anchor="middle">read that one gene</text>
+  <text x="471" y="65" text-anchor="middle" class="mono">the shortcut</text>
+  <line class="ln" x1="546" y1="52" x2="590" y2="52" marker-end="url(#a1)"/>
+  <text x="598" y="49" class="big">98%</text>
+  <text x="598" y="66" class="lbl">top-10% hits</text>
+</g>
+<rect class="box" x="396" y="168" width="150" height="44" rx="3"/>
+<text x="471" y="187" text-anchor="middle">targets respond</text>
+<text x="471" y="203" text-anchor="middle" class="mono" fill-opacity=".7">regulon score, ULM</text>
+<line class="ln" x1="546" y1="190" x2="590" y2="190" marker-end="url(#a1)"/>
+<text x="598" y="187" class="big">45%</text>
+<text x="598" y="204" class="lbl">top-10% hits</text>
+<line class="ln" x1="471" y1="78" x2="471" y2="164" stroke-dasharray="3 4" marker-end="url(#a1)"/>
+<text x="481" y="124" fill-opacity=".75">the intended inference</text>
+
+</svg>
+<figcaption>Two routes from the same perturbation to the same answer. The benchmark asks which TF was knocked down; the regulon path is the inference the method is for, and the direct path is a single number the method never needed. On knockTF the shortcut wins by more than two to one.</figcaption>
+</figure>
+
+
+
+<p>Adding the TF's own log fold change to ULM's score lifts the hit rate from 45% to 66%, 77% and <strong>94%</strong> at three weights, better than ULM on 89–91% of experiments; the own log fold change with no regulon at all reaches <strong>98%</strong> <cite>(F-013/V-013)</cite>. On this benchmark it beats ULM+CollecTRI outright. Whether it beats other regulon methods is untested here; an own-expression-only variant did beat eleven methods on a different benchmark with a different network (Yashar et al. 2024, <em>iScience</em> — <cite>F-025</cite> <span class="flag">unverified</span>).</p>
+
+<p>Two structural points compound it:</p>
+
+<ul class="plain">
+  <li><strong>The loader filters on the same axis.</strong> <code>dc.ds.knocktf()</code> keeps 388 of 907 experiments by the sign and size of the TF's own mRNA change. <cite>(F-018/V-018)</cite></li>
+  <li><strong>A recent single-cell benchmark's preprocessing does the same</strong>, keeping a TF only if its mean is lower in the perturbed arm. <cite>(V-027)</cite></li>
+</ul>
+
+<p>There is also no measured zero dose. An exact <code>0.0</code> in the knockTF matrix is a fill value for "not measured": of the 907 rows, 82 of the 140 with non-negative own logFC are missing values; among the <strong>643 scored</strong>, the non-negative bin is 38 unmeasured, 21 inside the experiment's noise and only 18 measurably raised. <cite>(F-022/V-022)</cite></p>
+
+<h2><span class="num">2</span>The mechanism: one edge</h2>
+
+<figure>
+<svg class="dgm" viewBox="0 0 700 272" role="img" aria-label="A gene-by-TF matrix. Gene X's own logFC reaches the score for TF X through a single self-edge cell, while appearing in other TFs' columns affects only their scores.">
+<defs><marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+<text x="14" y="30" class="lbl">measured logFC</text>
+<text x="214" y="30" class="lbl">regulon of TF X</text>
+<text x="370" y="30" class="lbl">regulon of TF Y</text>
+<rect class="box" x="214" y="42" width="96" height="184" rx="3"/>
+<rect class="box" x="370" y="42" width="96" height="184" rx="3"/>
+<g>
+<rect class="box" x="14" y="48" width="128" height="22" rx="2"/>
+<text x="24" y="63" class="mono">gene A</text>
+<text x="112" y="63" class="mono" text-anchor="end" fill-opacity=".55">&#183;</text>
+</g>
+<circle cx="262" cy="59" r="4" fill="currentColor" fill-opacity=".45"/>
+<g>
+<rect class="box" x="14" y="78" width="128" height="22" rx="2"/>
+<text x="24" y="93" class="mono">gene B</text>
+<text x="112" y="93" class="mono" text-anchor="end" fill-opacity=".55">&#183;</text>
+</g>
+<circle cx="418" cy="89" r="4" fill="currentColor" fill-opacity=".45"/>
+<g class="hot">
+<rect class="box" x="14" y="108" width="128" height="22" rx="2"/>
+<text x="24" y="123" class="mono">gene X</text>
+<text x="112" y="123" class="mono" text-anchor="end">&#8722;1.7</text>
+</g>
+<circle cx="418" cy="119" r="4" fill="currentColor" fill-opacity=".45"/>
+<g class="hot"><circle cx="262" cy="119" r="5.5" fill="currentColor"/>
+<line class="ln" x1="142" y1="119" x2="252" y2="119" marker-end="url(#a2)"/>
+<text x="197" y="110" text-anchor="middle" class="mono">self-edge</text></g>
+<g>
+<rect class="box" x="14" y="138" width="128" height="22" rx="2"/>
+<text x="24" y="153" class="mono">gene D</text>
+<text x="112" y="153" class="mono" text-anchor="end" fill-opacity=".55">&#183;</text>
+</g>
+<circle cx="262" cy="149" r="4" fill="currentColor" fill-opacity=".45"/>
+<g>
+<rect class="box" x="14" y="168" width="128" height="22" rx="2"/>
+<text x="24" y="183" class="mono">gene E</text>
+<text x="112" y="183" class="mono" text-anchor="end" fill-opacity=".55">&#183;</text>
+</g>
+<circle cx="418" cy="179" r="4" fill="currentColor" fill-opacity=".45"/>
+<g>
+<rect class="box" x="14" y="198" width="128" height="22" rx="2"/>
+<text x="24" y="213" class="mono">gene F</text>
+<text x="112" y="213" class="mono" text-anchor="end" fill-opacity=".55">&#183;</text>
+</g>
+<circle cx="262" cy="209" r="4" fill="currentColor" fill-opacity=".45"/>
+<line class="ln" x1="310" y1="134" x2="500" y2="134" marker-end="url(#a2)"/>
+<text x="514" y="138" class="mono">score(X)</text>
+<line class="ln" x1="466" y1="196" x2="500" y2="196" marker-end="url(#a2)"/>
+<text x="514" y="200" class="mono" fill-opacity=".6">score(Y)</text>
+<path class="ln dim" d="M142 104 C 330 104, 320 196, 408 196" stroke-dasharray="3 4"/>
+<text x="350" y="254" text-anchor="middle" fill-opacity=".85">gene X reaches <tspan class="mono">score(X)</tspan> through exactly one cell</text>
+</svg>
+<figcaption>ULM scores a TF by regressing every gene's logFC on that TF's column of the network. The perturbed gene enters its <em>own</em> score only if the network contains a self-edge — the filled dot. It appears in other TFs' columns too, but that moves their scores, not its own. Deleting that one cell and masking the gene remove the same arrow, and give the same 96 of 279 hits.</figcaption>
+</figure>
+
+
+
+<p>ULM regresses target log fold changes on a TF's regulon column, so the perturbed TF's own transcript enters its <em>own</em> score only through a self-edge X→X.</p>
+
+<p>Deleting that edge — leaving the gene in the matrix — gives 96/279 hits, the same count as masking, with the two hit sets differing on 2 of 279. Removing the gene from every <em>other</em> TF's regulon leaves the score at 0.455, unchanged. The equivalence holds <strong>at top-10%</strong>; at top-5% the two conditions differ slightly (0.280 masked against 0.272), and for propagation by about six experiments. <cite>(F-010/V-010)</cite></p>
+
+<p>The effect splits by whether the TF has a self-edge at all:</p>
+
+<div class="tw"><table>
+  <thead><tr><th></th><th class="n">n</th><th class="n">ULM</th><th class="n">Self-edge removed</th></tr></thead>
+  <tbody>
+    <tr><td>Has a self-edge</td><td class="n">197</td><td class="n">0.538</td><td class="n">0.386</td></tr>
+    <tr><td>No self-edge</td><td class="n">82</td><td class="n">0.244</td><td class="n">0.244</td></tr>
+  </tbody>
+</table></div>
+
+<p>Masking costs the no-self-edge group nothing — it has no channel to lose. <cite>(F-010/V-010)</cite></p>
+
+<p>It also splits by the edge's <strong>sign</strong>. In the set as fetched every knockdown lowers the TF's mRNA, so a +1 self-edge moves the score the rewarded way and a −1 edge the other. Removing the edge worsens 81 of 84 TFs with a +1 edge and improves 11 of 12 with a −1 edge. <cite>(F-011/V-011)</cite></p>
+
+<p><strong>The sign is usually not per-edge evidence.</strong> CollecTRI ships a <code>sign_decision</code> column: 58% of its +1 edges, and <strong>80% of its +1 self-edges</strong>, are a default fill for "no information" — chosen on the base rate of activation among signed edges (71–76%) <em>and</em> because it benchmarked better than defaulting to repression <cite>(F-016/V-016)</cite>. Of the 176 experiments whose TF has a +1 self-edge, 92 rest on that fill <cite>(F-017/V-017)</cite>. That the fill is not <em>per-edge</em> evidence does not make it uninformative: flipping all 21,699 default edges to −1 takes masked ULM from 96 hits to 62, so the default +1 is the single most consequential sign decision in the network. <cite>(V-021)</cite></p>
+
+<h3>The size law</h3>
+
+<p>Masking each of the 613 scored TFs in turn on a single-cell dataset, and fitting on the 227 with a self-edge, a measured own gene and a regulon surviving <code>tmin=3</code>:</p>
+
+<pre>log₁₀|Δscore| ≈ −0.53 − 0.46·log₁₀(regulon size)
+Spearman(size, |Δscore|) = −0.868, p = 1.7e-70 ;  R² = 0.80 for the joint fit</pre>
+
+<p>Detection is uncorrelated with the width on its own (Spearman +0.026, p = 0.69). It carries a small coefficient in the joint fit that is not separately quantified here; its real role is the second factor, the own gene's discriminative signal. <cite>(V-027)</cite></p>
+
+<p>In hit-rate terms on bulk knockTF, self-edge removal costs 51% of hits in the smallest tercile of self-edge experiments (median 45 targets), 32% in the middle (median 98) and 3% in the largest (median 425) — a split within the self-edge group only <cite>(V-010)</cite>. In AUROC terms on the single-cell dataset, |ΔAUROC| runs 1.1e-2 at 7 targets to 1.3e-3 above 300. <cite>(V-027)</cite></p>
+
+<p>So the leak is not a constant property of a benchmark. It is <strong>channel width × own-gene signal</strong>, and both must be checked before a benchmark is trusted or dismissed.</p>
+
+<h2><span class="num">3</span>What survives</h2>
+
+<figure>
+<svg class="dgm" viewBox="0 0 700 210" role="img" aria-label="A scale from zero to one hundred percent with marks at 12, 34, 45 and 98. The span from 34 to 45 is labelled the leak; the span from 12 to 34 is the surviving regulon signal.">
+<defs><marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+<line class="ln" x1="60.0" y1="96" x2="640.0" y2="96"/>
+<g><line class="ln" x1="129.6" y1="88" x2="129.6" y2="104"/>
+<text x="129.6" y="80" text-anchor="middle" class="big">12%</text>
+<text x="129.6" y="122" text-anchor="middle" class="lbl">per-TF</text>
+<text x="129.6" y="136" text-anchor="middle" class="lbl">base rate</text>
+</g>
+<g class="hot"><line class="ln" x1="257.20000000000005" y1="88" x2="257.20000000000005" y2="104"/>
+<text x="257.20000000000005" y="80" text-anchor="middle" class="big">34%</text>
+<text x="257.20000000000005" y="122" text-anchor="middle" class="lbl">masked</text>
+<text x="257.20000000000005" y="136" text-anchor="middle" class="lbl">ULM</text>
+</g>
+<g><line class="ln" x1="321.0" y1="88" x2="321.0" y2="104"/>
+<text x="321.0" y="80" text-anchor="middle" class="big">45%</text>
+<text x="321.0" y="122" text-anchor="middle" class="lbl">ULM as</text>
+<text x="321.0" y="136" text-anchor="middle" class="lbl">reported</text>
+</g>
+<g><line class="ln" x1="628.4" y1="88" x2="628.4" y2="104"/>
+<text x="628.4" y="80" text-anchor="middle" class="big">98%</text>
+<text x="628.4" y="122" text-anchor="middle" class="lbl">own logFC</text>
+<text x="628.4" y="136" text-anchor="middle" class="lbl">alone</text>
+</g>
+<path class="ln" d="M129.6 164 L129.6 172 L257.20000000000005 172 L257.20000000000005 164"/>
+<text x="193.40000000000003" y="190" text-anchor="middle">real regulon signal</text>
+<g class="hot"><path class="ln" d="M257.20000000000005 164 L257.20000000000005 172 L321.0 172 L321.0 164"/>
+<text x="289.1" y="190" text-anchor="middle" class="mono">the leak</text></g>
+<line class="ln dim" x1="321.0" y1="40" x2="628.4" y2="40" stroke-dasharray="3 4"/>
+<text x="474.7" y="33" text-anchor="middle" fill-opacity=".8">what one gene buys with no regulon at all</text>
+</svg>
+<figcaption>The headline number decomposed. Of ULM's 45%, eleven points come through the self-edge and disappear under masking; the remaining 34% sits well above the rate at which these same TFs rank highly when a <em>different</em> TF was perturbed. Chance here is 12.2%, not 10%.</figcaption>
+</figure>
+
+
+
+<p>With the perturbed gene masked, ULM+CollecTRI scores <strong>0.344</strong> on the 279.</p>
+
+<p>The right null is not 1/N: large regulons rank high in every experiment regardless of what was perturbed. We use a <strong>per-TF base rate</strong> — how often the same TF is top-10% where a <em>different</em> TF was perturbed — which on these 279 is <strong>0.122</strong> under the masking convention the 0.344 itself uses, with three independent nulls agreeing at 0.09–0.13 (the same construction over all 643 scored experiments gives 0.123; a single three-decimal figure had been quoted against both denominators). Masked ULM is 2.8× that, and on the 643 scored set it reaches 13/38 even on experiments whose own gene was never measured. <cite>(V-022)</cite></p>
+
+<p>Two apparent improvements did not survive masking:</p>
+
+<ul class="plain">
+  <li><strong>Propagating scores along TF→TF edges</strong> reached 57% against 45%. Masked it falls to 28% — <em>below</em> masked ULM's 34%. Of the hits lost, 84–90% go through the upstream regulators' regulons and 10–16% through the self-edge <cite>(V-010)</cite>. Masking a co-regulated gene with a comparably negative logFC instead costs propagation 0.3 points, against 29 for the TF's own. <cite>(F-004, F-012/V-012)</cite></li>
+  <li><strong>A robust (Huber) loss</strong> scored 32% against 45% unmasked. About half to two thirds of that deficit was the robust loss <em>clipping the leak</em> — it assigns the own gene a median weight of 0.09. Masked, the comparison is 30% against 34%: still worse on paired rank (p = 0.002) and top-5%, but <strong>not distinguishable at top-10%</strong> (12 hits, exact McNemar p = 0.10). The deficit is confined to the 197 self-edge experiments; without a self-edge Huber and ULM both score 20/82. <cite>(F-008/V-008)</cite></li>
+</ul>
+
+<p>The second generalises as a warning: any outlier-robust scorer will down-weight a ~5 sd own-gene value and look worse on an unmasked benchmark for reasons unrelated to activity inference.</p>
+
+<h2><span class="num">4</span>A second confound: study context</h2>
+
+<figure>
+<svg class="dgm" viewBox="0 0 700 268" role="img" aria-label="Nested boxes: any experiment 12 percent, same cell line other series 14.5, same series different TF perturbed 21.8, the TF's own experiment 25.5.">
+<defs><marker id="a4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+
+<rect class="box" x="16" y="20" width="460" height="230" rx="4"/>
+<text x="32" y="42" class="lbl">any experiment, any study</text>
+<text x="404" y="44" class="big">12%</text>
+<rect class="box" x="44" y="62" width="404" height="170" rx="4"/>
+<text x="60" y="84" class="lbl">same cell line, other series</text>
+<text x="404" y="86" class="big">14.5%</text>
+<rect class="box" x="74" y="104" width="344" height="110" rx="4"/>
+<text x="90" y="126" class="lbl">same GEO series, a different TF perturbed</text>
+<text x="404" y="128" class="big">21.8%</text>
+<g class="hot">
+<rect class="box" x="104" y="146" width="284" height="50" rx="4"/>
+<text x="120" y="168" class="lbl">this TF's own experiment</text>
+<text x="404" y="172" class="big">25.5%</text>
+</g>
+<path class="ln" d="M498 96 L516 96 L516 168 L498 168" />
+<text x="528" y="126" fill-opacity=".85">entering the series</text>
+<text x="528" y="142" fill-opacity=".85">buys 7.3 points;</text>
+<text x="528" y="158" fill-opacity=".85">being the perturbed</text>
+<text x="528" y="174" fill-opacity=".85">TF buys 3.7 more</text>
+
+</svg>
+<figcaption>How often a TF ranks in the top 10%, by how close the experiment is to it. Most of the margin over chance is bought by being in the right GEO series at all — before the question of which TF was actually perturbed. Measured on the 106 experiments that support all three comparisons.</figcaption>
+</figure>
+
+
+
+<p>The 34% is TF-specific only in part. On the 106 of 643 scored experiments that support the contrast, under a symmetric mask (every perturbed TF's gene zeroed in every row):</p>
+
+<div class="tw"><table>
+  <thead><tr><th></th><th class="n">Top-10% rate</th></tr></thead>
+  <tbody>
+    <tr><td>The TF, in its own experiment</td><td class="n">0.255</td></tr>
+    <tr><td>The same TF, same series, a <em>different</em> TF perturbed</td><td class="n">0.218</td></tr>
+    <tr><td>The same TF, same cell line, a different series</td><td class="n">0.145</td></tr>
+  </tbody>
+</table></div>
+
+<p>The study-context lift is <strong>+0.073</strong>, 95% study-clustered CI [+0.019, +0.178] — two thirds of the perturbed-TF effect (ratio 0.68, CI [0.21, 1.60]). Under the asymmetric mask the same interval sits on zero and is retired. <cite>(F-028/V-028)</cite></p>
+
+<p><strong>It is removable.</strong> Series-mean centering takes the lift to +0.020 [−0.034, +0.088], at a cost of 0.036 on the own-arm baseline. "Regulon-specific" does not imply "not batch": a series-wide signed component aligned with a TF's regulon is both. <cite>(V-028)</cite></p>
+
+<p>It <em>is</em> specific to the TF's real regulon — a degree-preserving shuffle leaves 6% of it, and judging a random real TF instead gives p = 0.003 — and it is <strong>not</strong> regulon overlap with the series' other perturbed TF, being larger where the two TFs share no targets at all.</p>
+
+<p>Three limits. It exists only under per-row weighting (pair-weighted it is −0.001). It is <strong>absent in knockTF's one systematic 78-TF screen</strong> (−0.004) while worth +0.117 in the 23 small studies that chose two to four related TFs — a pattern favouring the benign explanation that researchers pick functionally related TFs to study together, and that a good method <em>should</em> respond to all of them. And 537 of the 643 scored experiments cannot be tested this way at all. The data cannot separate co-selection from a shared control sample, because knockTF as fetched exposes no control-sample identifier — its 14 observation columns carry no sample or control ID. <cite>(V-028)</cite></p>
+
+<p><strong>Practical consequence:</strong> benchmark on knockTF with a study control or a series centering, and do not read top-10% recovery as TF-specific detection at the resolution of a GEO series.</p>
+
+<h2><span class="num">5</span>Does it transfer?</h2>
+
+<figure>
+<svg class="dgm" viewBox="0 0 700 322" role="img" aria-label="A plane with regulon size on the horizontal axis and own-gene signal on the vertical. knockTF sits top-left with a large leak; the single-cell TP53 dataset sits bottom-right with none.">
+<defs><marker id="a5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+
+<line class="ln" x1="80" y1="250" x2="600" y2="250" marker-end="url(#a5)"/>
+<line class="ln" x1="80" y1="250" x2="80" y2="40" marker-end="url(#a5)"/>
+<text x="340" y="282" text-anchor="middle" class="lbl">regulon size &#8594;</text>
+<text x="-145" y="26" transform="rotate(-90)" text-anchor="middle" class="lbl">own-gene signal &#8594;</text>
+<text x="96" y="268" class="mono" fill-opacity=".6">5</text>
+<text x="330" y="268" class="mono" fill-opacity=".6">100</text>
+<text x="568" y="268" class="mono" fill-opacity=".6">800</text>
+<path class="ln dim" d="M110 70 C 240 118, 300 150, 560 176" stroke-dasharray="4 5"/>
+<path class="ln dim" d="M110 132 C 240 176, 300 202, 560 224" stroke-dasharray="4 5"/>
+<text x="150" y="62" class="mono dim">leak = 10%</text>
+<text x="150" y="126" class="mono dim">leak = 1%</text>
+<g class="hot">
+<circle cx="132" cy="84" r="6" fill="currentColor"/>
+<text x="148" y="80">knockTF, small regulons</text>
+<text x="148" y="96" class="mono">45 targets &#183; 51% of hits lost</text>
+</g>
+<circle cx="556" cy="222" r="6" fill="currentColor" fill-opacity=".5"/>
+<text x="546" y="218" text-anchor="end">single-cell TP53</text>
+<text x="546" y="234" text-anchor="end" class="mono" fill-opacity=".75">772 targets &#183; &#916;AUROC 0.0001</text>
+<text x="96" y="304" class="mono" fill-opacity=".8">|&#916;score| &#8733; size^(&#8722;0.46) &#215; own-gene signal</text>
+
+</svg>
+<figcaption>Why the same mechanism is worth half a benchmark's hits in one place and nothing in another. The leak is a product of two factors — how much one gene can move a t-statistic, which falls as 1/&#8730;n with regulon size, and how well that gene separates the arms. The two datasets we tested sit at opposite corners; the dashed contours are schematic.</figcaption>
+</figure>
+
+
+
+<p>We reran a 2026 single-cell TF-activity benchmark on its own shipped dataset (TP53, 617 cells). The anchor and the masked condition ran their <strong>untouched</strong> scoring and evaluation code; the network-side conditions and the shuffled band used a patched copy whose diff was audited as touching no scoring code <cite>(F-027, audit in V-027)</cite>. The anchor reproduces their shipped numbers, and an independent <code>decoupler</code> call matched them to six decimals and their score matrix to 3.55e-15 — which is expected for a closed-form t-statistic on a shipped input, so it is a determinism and version-stability check rather than a remarkable agreement. <cite>(V-027)</cite></p>
+
+<p><strong>Masking TP53's own gene moved their headline AUROC by −0.0001</strong>, against a refutation threshold of 0.05 stated in the script docstring before the run. The leak does not transfer here, and the size law says why: TP53 has 772 measured targets and its own transcript separates the arms at AUROC 0.493 — chance. Both factors are at their minimum. <cite>(F-027/V-027)</cite></p>
+
+<p>This is a negative result for our own hypothesis. Its scope: one dataset, one TF, and the worst available case for the leak. Their other 16 datasets are not public and are likely to include small-regulon TFs with stronger knockdowns, where the law predicts ~1e-2 AUROC rather than 1e-4.</p>
+
+<p>The controls found two problems the main test did not:</p>
+
+<ul class="plain">
+  <li><strong>A shape-matched random regulon scores 0.47 ± 0.14</strong> on that dataset (central 95% [0.225, 0.762], 100 seeds). That band covers <strong>34 of their 60 published columns</strong> for this TF, including their own <code>random</code> control — on this one dataset, for this one TF; their published ranking is over 40 datasets and this licenses no statement about it. <cite>(V-027)</cite></li>
+  <li><strong><code>decoupler</code>'s ORA is unstable on sparse counts.</strong> Rescoring an <em>unchanged</em> matrix under different feature orderings moves its AUROC by 0.17–0.19 — the size of the effect masking appeared to produce. Verified in V-027; not yet filed as a claim.</li>
+</ul>
+
+<h2><span class="num">6</span>What is new</h2>
+
+<p>The bare observation is not. Two groups found that a TF's own expression predicts which TF was perturbed as well as or better than regulon methods: Trescher &amp; Leser (2019, <em>Scientific Reports</em>), who read it as the network methods underperforming and who name TF self-regulation as a cause of method <em>failure</em>; and Yashar et al. (2024, <em>iScience</em>), whose own-expression-only variant of Priori beat eleven methods including ULM, and who used it constructively as a feature. Neither framed it as a validity problem; neither masked the gene. <cite>(F-025</cite> <span class="flag">unverified</span>)</p>
+
+<p>A title-and-abstract screen of a 176-paper citation graph seeded on knockTF, plus full reads of two reviews on validating these methods, did not find the self-edge mechanism, the masking ablation, a degree-preserving shuffle or a per-TF base rate. That is a screen, not an exhaustive search; one of the two reviews is not in <code>refs/</code> and so is not re-checkable here; and F-025's own confidence in the negative is <strong>medium</strong>, with <strong>low</strong> confidence that the mechanism is unpublished outside that corpus. On present evidence the contribution is the mechanism and its controls, not the discovery that the benchmark is gameable.</p>
+
+<h2><span class="num">7</span>The protocol</h2>
+
+<figure>
+<svg class="dgm" viewBox="0 0 700 236" role="img" aria-label="A four-stage pipeline from expression matrix to metric, with the five protocol rules attached at the stages they act on.">
+<defs><marker id="a6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+
+<rect class="box" x="16" y="92" width="112" height="44" rx="3"/>
+<text x="72" y="112" text-anchor="middle">expression</text>
+<text x="72" y="127" text-anchor="middle">matrix</text>
+<line class="ln" x1="128" y1="114" x2="164" y2="114" marker-end="url(#a6)"/>
+<rect class="box" x="166" y="92" width="112" height="44" rx="3"/>
+<text x="222" y="119" text-anchor="middle">network</text>
+<line class="ln" x1="278" y1="114" x2="314" y2="114" marker-end="url(#a6)"/>
+<rect class="box" x="316" y="92" width="112" height="44" rx="3"/>
+<text x="372" y="119" text-anchor="middle">score per TF</text>
+<line class="ln" x1="428" y1="114" x2="464" y2="114" marker-end="url(#a6)"/>
+<rect class="box" x="466" y="92" width="112" height="44" rx="3"/>
+<text x="522" y="119" text-anchor="middle">rank &#38; metric</text>
+<g class="hot">
+<line class="ln" x1="72" y1="66" x2="72" y2="88" marker-end="url(#a6)"/>
+<text x="72" y="56" text-anchor="middle" class="mono">1 mask own gene</text>
+<line class="ln" x1="222" y1="66" x2="222" y2="88" marker-end="url(#a6)"/>
+<text x="222" y="56" text-anchor="middle" class="mono">2 shuffle, 100 seeds</text>
+<line class="ln" x1="494" y1="66" x2="494" y2="88" marker-end="url(#a6)"/>
+<text x="494" y="56" text-anchor="middle" class="mono">3 per-TF base rate</text>
+<line class="ln" x1="550" y1="162" x2="550" y2="140" marker-end="url(#a6)"/>
+<text x="550" y="178" text-anchor="middle" class="mono">4 study-control</text>
+</g>
+<line class="ln dim" x1="16" y1="200" x2="578" y2="200" stroke-dasharray="3 4"/>
+<text x="297" y="220" text-anchor="middle" class="mono">5 declare the causal route &#8212; is the TF's own mRNA on the path at all?</text>
+
+</svg>
+<figcaption>The five rules are not a checklist run at the end; each attaches at a different stage, and the last one is a property of the experiment rather than of the scoring. Two of them exist because this project's own numbers broke without them.</figcaption>
+</figure>
+
+
+
+<p>Reusable independently of any finding here:</p>
+
+<ol class="findings">
+  <li><strong>Mask the perturbed TF's own gene</strong> before scoring. For a univariate scorer, deleting its self-edge is equivalent at top-10% and free at scoring time; check top-5% separately.</li>
+  <li><strong>Shuffle the network preserving degree and sign mix</strong>, with at least <strong>100 seeds</strong>, reported as mean ± sd with a central 95% interval. Ten seeds is not a null: it produced two wrong intervals in this work before the rule was adopted.</li>
+  <li><strong>Compare against a per-TF base rate</strong>, not 1/N. Chance here is 12.2%, not 10%.</li>
+  <li><strong>Study-control or centre by series</strong> when experiments come from multi-TF studies.</li>
+  <li><strong>Declare the causal route.</strong> <em>TF-perturbing</em> means the TF's own mRNA is on the causal path (knockTF, Perturb-seq knockdowns); <em>TF-sparing</em> means it is not (phosphoproteomics, upstream-regulator perturbations, signalling stimuli). Agreement between two TF-perturbing benchmarks is one measurement twice. Every benchmark in this paper — including §5's — is TF-perturbing.</li>
+</ol>
+
+<h2><span class="num">8</span>Limitations</h2>
+
+<figure>
+<svg class="dgm" viewBox="0 0 700 244" role="img" aria-label="Two causal chains. The upper one runs from knocking down a TF through its mRNA and protein to its targets. The lower one bypasses the mRNA entirely, going from an upstream perturbation to the TF's protein state and then its targets.">
+<defs><marker id="a7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+
+<text x="16" y="34" class="lbl">TF-perturbing &#8212; abundance is on the causal path</text>
+<rect class="box" x="16" y="48" width="118" height="42" rx="3"/>
+<text x="75" y="74" text-anchor="middle">knock down TF</text>
+<line class="ln" x1="134" y1="69" x2="168" y2="69" marker-end="url(#a7)"/>
+<g class="hot">
+<rect class="box" x="170" y="48" width="112" height="42" rx="3"/>
+<text x="226" y="74" text-anchor="middle">TF mRNA &#8595;</text>
+</g>
+<line class="ln" x1="282" y1="69" x2="316" y2="69" marker-end="url(#a7)"/>
+<rect class="box" x="318" y="48" width="112" height="42" rx="3"/>
+<text x="374" y="74" text-anchor="middle">TF protein &#8595;</text>
+<line class="ln" x1="430" y1="69" x2="464" y2="69" marker-end="url(#a7)"/>
+<rect class="box" x="466" y="48" width="112" height="42" rx="3"/>
+<text x="522" y="74" text-anchor="middle">targets move</text>
+<line class="ln dim" x1="16" y1="122" x2="684" y2="122"/>
+<text x="16" y="158" class="lbl">TF-sparing &#8212; abundance is not</text>
+<rect class="box" x="16" y="172" width="118" height="42" rx="3"/>
+<text x="75" y="192" text-anchor="middle">stimulate, or</text>
+<text x="75" y="206" text-anchor="middle">knock out upstream</text>
+<line class="ln" x1="134" y1="193" x2="316" y2="193" marker-end="url(#a7)"/>
+<g class="dim">
+<rect class="box" x="170" y="172" width="112" height="42" rx="3" stroke-dasharray="3 4"/>
+<text x="226" y="198" text-anchor="middle">TF mRNA &#8212;</text>
+</g>
+<rect class="box" x="318" y="172" width="112" height="42" rx="3"/>
+<text x="374" y="192" text-anchor="middle">TF protein state</text>
+<text x="374" y="206" text-anchor="middle" class="mono" fill-opacity=".7">not its level</text>
+<line class="ln" x1="430" y1="193" x2="464" y2="193" marker-end="url(#a7)"/>
+<rect class="box" x="466" y="172" width="112" height="42" rx="3"/>
+<text x="522" y="198" text-anchor="middle">targets move</text>
+<text x="600" y="74" fill-opacity=".85">everything</text>
+<text x="600" y="90" fill-opacity=".85">here is this</text>
+<text x="600" y="106" fill-opacity=".85">route</text>
+<text x="600" y="198" fill-opacity=".85">one dataset,</text>
+<text x="600" y="214" fill-opacity=".85">17 TFs</text>
+
+</svg>
+<figcaption>The distinction that decides what corroboration is worth. Only on the lower route can a method be shown to read activity rather than abundance, because the TF's own transcript is not on the causal path at all. Agreement between two upper-route benchmarks is one measurement made twice.</figcaption>
+</figure>
+
+
+
+<ul class="plain">
+  <li><strong>Everything is one route.</strong> All but one claim is TF-perturbing, mostly one benchmark. The single TF-sparing measurement is inconclusive: masked ULM against phosphoproteomics-derived occupancy gives −0.018, CI [−0.33, +0.33], on 17 TFs. That route's ground truth covers 174 of CollecTRI's 1,185 TFs, so its interval caps at about ±0.11 even if every one were measurable. <cite>(F-024/V-024)</cite></li>
+  <li><strong>The within-study margin is unresolved, not small.</strong> +0.066 under the symmetric mask, with a lower bound that is positive in only 2 of 20 bootstrap seeds and must not be cited as excluding zero. Power at a true effect of +0.05 is 28%; the minimum detectable effect is +0.110. <cite>(V-026, V-028)</cite></li>
+  <li><strong>What we could not test at all</strong> is whether these scores track activity that abundance cannot explain. That needs the same TF at several protein levels without perturbing the TF. The largest within-TF dose resource we found, scTF-seq (Liu et al. 2025), is itself TF-perturbing and reads dose off the transcript rather than the protein; we did not find one that meets the requirement, which is weaker than a claim that none exists.</li>
+  <li><strong>Pre-registration is by docstring, not by commit.</strong> Predictions were written into each script before its run, but the repository is not under version control, so that ordering cannot be independently verified.</li>
+</ul>
+
+<hr class="rule">
+
+<footer>
+  <p><strong>Data and code.</strong> knockTF and CollecTRI as fetched by <code>decoupler</code>; the 2026 benchmark's own repository at commit <code>b904196</code>. One script per experiment in <code>analysis/</code>, each self-contained, each ending in an assertion. Claims and verdicts in <code>findings.md</code>, append-only, every claim independently rerun before it becomes citable.</p>
+</footer>
+
+</div>

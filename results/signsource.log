@@ -1,0 +1,204 @@
+ulm            top10%=0.45 top5%=0.35
+ulm hub_corr (mean |score| vs TF-TF degree) = 0.63
+direction norm  alpha  top10  top5  better  worse  hub_corr
+       up  sum   0.50   0.57  0.47    0.59   0.37      0.85
+       up  sum   0.25   0.57  0.48    0.63   0.33      0.87
+     both  sum   0.25   0.55  0.44    0.58   0.38      0.92
+       up  sum   1.00   0.55  0.44    0.58   0.39      0.85
+       up  sum   2.00   0.54  0.43    0.57   0.41      0.84
+     both  sum   0.50   0.53  0.43    0.55   0.42      0.92
+     both  sum   1.00   0.53  0.42    0.53   0.46      0.92
+     both  sum   2.00   0.52  0.41    0.53   0.45      0.92
+       up mean   1.00   0.51  0.42    0.61   0.33      0.32
+       up mean   2.00   0.51  0.38    0.54   0.42      0.10
+       up mean   0.50   0.49  0.41    0.65   0.25      0.52
+     both mean   1.00   0.49  0.38    0.51   0.43      0.32
+     both mean   0.50   0.48  0.37    0.54   0.35      0.51
+       up mean   0.25   0.47  0.39    0.68   0.20      0.60
+     both mean   0.25   0.46  0.36    0.59   0.27      0.59
+     both mean   2.00   0.45  0.34    0.43   0.53      0.07
+     down mean   0.25   0.45  0.35    0.39   0.46      0.59
+     down mean   0.50   0.43  0.34    0.36   0.55      0.50
+     down  sum   0.25   0.42  0.28    0.43   0.53      0.80
+     down mean   1.00   0.41  0.29    0.32   0.62      0.29
+     down  sum   0.50   0.38  0.27    0.41   0.57      0.81
+     down  sum   1.00   0.35  0.23    0.38   0.61      0.82
+     down  sum   2.00   0.33  0.21    0.36   0.63      0.82
+     down mean   2.00   0.32  0.19    0.29   0.68      0.01
+
+variant                          top10  top5  better worse
+ulm                              0.45   0.35  0.00   0.00
+up sum a=0.5                     0.57   0.47  0.59   0.37
+up sum a=0.5 SHUF x10 mean       0.31   0.19  [0.28-0.33] [0.16-0.22]
+up mean a=1                      0.51   0.42  0.61   0.33
+up mean a=1 SHUF x10 mean        0.42   0.31  [0.41-0.43] [0.30-0.32]
+ulm + 0.5*own mRNA               0.66   0.56  0.91   0.01
+ulm + 1*own mRNA                 0.77   0.67  0.91   0.02
+ulm + 2*own mRNA                 0.94   0.86  0.89   0.03
+ulm + 1*own + up mean a=1        0.77   0.66  0.85   0.09
+
+variant (own mRNA masked)        top10  top5  better worse
+ulm                              0.34   0.28  0.00   0.00
+up sum a=0.5                     0.28   0.16  0.42   0.57
+up sum a=0.5 SHUF x10 mean       0.26   0.16  [0.24-0.27] [0.14-0.20]
+up mean a=1                      0.34   0.22  0.39   0.57
+up mean a=1 SHUF x10 mean        0.33   0.24  [0.31-0.35] [0.23-0.25]
+
+279 experiments, 155 TFs; 197 experiments (71%) whose perturbed TF has a CollecTRI self-edge surviving tmin=5, 82 without; 0 whose gene is not in the scored matrix at all
+self-edges in the pruned network: 412 of 766 TFs
+
+(1) plain ULM unmasked vs own-gene-masked, split by self-edge (better/worse = masked vs unmasked ULM, within group)
+group                              top10   hits/n    top5  better worse
+self-edge: unmasked                0.538   106/197  0.426  0.00   0.00
+self-edge: MASKED                  0.386    76/197  0.315  0.11   0.81
+no self-edge: unmasked             0.244    20/82   0.183  0.00   0.00
+no self-edge: MASKED               0.244    20/82   0.195  0.24   0.07
+
+(2) decomposition of the 0.45 -> 0.34 drop, all experiments (better/worse vs unmasked full-network ULM)
+variant                            top10   hits/n    top5  better worse
+ulm (full net)                     0.452   126/279  0.355  0.00   0.00
+no self-edge                       0.344    96/279  0.272  0.06   0.59
+no other regulon                   0.455   127/279  0.366  0.41   0.04
+gene off network                   0.348    97/279  0.283  0.15   0.58
+masked (leak.py)                   0.344    96/279  0.280  0.15   0.59
+    same, restricted to the self-edge group
+  ulm (full net)                   0.538   106/197  0.426  0.00   0.00
+  no self-edge                     0.386    76/197  0.310  0.09   0.84
+  no other regulon                 0.543   107/197  0.437  0.48   0.04
+  gene off network                 0.391    77/197  0.320  0.11   0.81
+  masked (leak.py)                 0.386    76/197  0.315  0.11   0.81
+    same, restricted to the NO-self-edge group
+  ulm (full net)                   0.244    20/82   0.183  0.00   0.00
+  no self-edge                     0.244    20/82   0.183  0.00   0.00
+  no other regulon                 0.244    20/82   0.195  0.24   0.04
+  gene off network                 0.244    20/82   0.195  0.24   0.04
+  masked (leak.py)                 0.244    20/82   0.195  0.24   0.07
+
+(3) same decomposition under up/sum/alpha=0.5 propagation (0.57 unmasked -> 0.28 masked in F-004; better/worse vs unmasked plain ULM)
+variant + propagation              top10   hits/n    top5  better worse
+ulm (full net)                     0.566   158/279  0.473  0.59   0.37
+no self-edge                       0.538   150/279  0.434  0.57   0.39
+no other regulon                   0.326    91/279  0.222  0.35   0.64
+gene off network                   0.280    78/279  0.186  0.33   0.66
+masked (leak.py)                   0.276    77/279  0.165  0.32   0.66
+    same, restricted to the self-edge group
+  ulm (full net)                   0.660   130/197  0.569  0.59   0.38
+  no self-edge                     0.619   122/197  0.513  0.56   0.41
+  no other regulon                 0.376    74/197  0.259  0.29   0.70
+  gene off network                 0.310    61/197  0.208  0.26   0.73
+  masked (leak.py)                 0.310    61/197  0.178  0.26   0.73
+    same, restricted to the NO-self-edge group
+  ulm (full net)                   0.341    28/82   0.244  0.60   0.35
+  no self-edge                     0.341    28/82   0.244  0.60   0.35
+  no other regulon                 0.207    17/82   0.134  0.49   0.49
+  gene off network                 0.207    17/82   0.134  0.49   0.49
+  masked (leak.py)                 0.195    16/82   0.134  0.48   0.50
+
+==============================================================================
+(5) T-028: CollecTRI sign_decision crosstabs (F-016, committed)
+
+all edges (n=42990)
+weight              -1.0    1.0
+sign_decision                  
+PMID                5675  13721
+default activation     0  21699
+regulon              147   1748
+
+self-edges (source == target) (n=461)
+weight              -1.0   1.0
+sign_decision                 
+PMID                  30    68
+default activation     0   343
+regulon                3    17
+
+self-edges of the 155 knockTF perturbed TFs, one row per TF (n=96)
+weight              -1.0   1.0
+sign_decision                 
+PMID                  11    29
+default activation     0    50
+regulon                1     5
+
+same, one row per experiment (279 experiments) (n=197)
+weight              -1.0   1.0
+sign_decision                 
+PMID                  20    74
+default activation     0    92
+regulon                1    10
+  82 experiments whose perturbed TF has no self-edge in the raw network
+
+==============================================================================
+(6) F-011's conditions split by sign_decision (better/worse = that variant vs unmasked full-network ULM, within the group)
+
+default activation (+1): n=92 experiments, 50 TFs, median regulon 78 targets
+  variant                top10  hits/n     top5  hits/n    better worse
+  ulm (full net)         0.565  52/92   0.413  38/92   0.00   0.00
+  no self-edge           0.326  30/92   0.239  22/92   0.00   0.96
+  masked (leak.py)       0.315  29/92   0.239  22/92   0.00   0.96
+
+PMID (+1): n=74 experiments, 29 TFs, median regulon 186 targets
+  variant                top10  hits/n     top5  hits/n    better worse
+  ulm (full net)         0.541  40/74   0.446  33/74   0.00   0.00
+  no self-edge           0.446  33/74   0.365  27/74   0.00   0.91
+  masked (leak.py)       0.459  34/74   0.378  28/74   0.07   0.82
+
+regulon (+1): n=10 experiments, 5 TFs, median regulon 97 targets
+  variant                top10  hits/n     top5  hits/n    better worse
+  ulm (full net)         0.600   6/10   0.500   5/10   0.00   0.00
+  no self-edge           0.200   2/10   0.200   2/10   0.00   1.00
+  masked (leak.py)       0.200   2/10   0.200   2/10   0.00   1.00
+
+PMID (-1): n=20 experiments, 11 TFs, median regulon 330 targets
+  variant                top10  hits/n     top5  hits/n    better worse
+  ulm (full net)         0.400   8/20   0.400   8/20   0.00   0.00
+  no self-edge           0.550  11/20   0.500  10/20   0.80   0.00
+  masked (leak.py)       0.550  11/20   0.500  10/20   0.80   0.00
+
+regulon (-1): n=1 experiments, 1 TFs, median regulon 11 targets
+  variant                top10  hits/n     top5  hits/n    better worse
+  ulm (full net)         0.000   0/1    0.000   0/1    0.00   0.00
+  no self-edge           0.000   0/1    0.000   0/1    1.00   0.00
+  masked (leak.py)       0.000   0/1    0.000   0/1    1.00   0.00
+
+no self-edge: n=82 experiments, 59 TFs, median regulon 23 targets
+  variant                top10  hits/n     top5  hits/n    better worse
+  ulm (full net)         0.244  20/82   0.183  15/82   0.00   0.00
+  no self-edge           0.244  20/82   0.183  15/82   0.00   0.00
+  masked (leak.py)       0.244  20/82   0.195  16/82   0.24   0.07
+
+  top-10% hits lost / gained on self-edge removal, by sign_decision (V-011: 33 lost, all +1; 3 gained, all -1)
+  group                      lost gained  hits full -> no self-edge
+  default activation (+1)      22      0   52 ->  30
+  PMID (+1)                     7      0   40 ->  33
+  regulon (+1)                  4      0    6 ->   2
+  PMID (-1)                     0      3    8 ->  11
+  regulon (-1)                  0      0    0 ->   0
+  no self-edge                  0      0   20 ->  20
+  TOTAL                        33      3  126 ->  96
+
+  (3) median rank change of the true TF on self-edge removal (of 766 TFs; + = pushed down), within regulon-size bins
+  size bin                   default (+1)                    PMID (+1)
+             n  TFs  med.size  drank  hits n  TFs  med.size  drank  hits
+  <= 60      33   25        33     91  20->8    5    4        22     82   3->0  
+  61-150     40   18        84     58  21->11  29   13        93     18  15->14 
+  > 150      19    7       221      9  11->11  40   12       425     15  22->19 
+  same bins: median |d own score| (t-units), median |own logFC|, median starting rank fraction under full ULM
+  size bin     default (+1): |ds|  |lfc|  start      PMID (+1): |ds|  |lfc|  start
+  <= 60                     1.154  1.59   0.059                1.527  1.99   0.093
+  61-150                    0.551  1.67   0.084                0.578  1.62   0.055
+  > 150                     0.225  1.74   0.039                0.253  1.79   0.063
+
+  (4) default-activation fraction of the SCORED regulon (pruned network) of the 279 experiments' perturbed TFs:
+      median 0.53, IQR 0.15-0.62 (155 distinct TFs: median 0.52)
+  masked-ULM hit rate by regulon sign provenance (size is confounded; bins given)
+  stratum                  mostly evidence (<50% default)           mostly default (>=50%)
+                             n  TFs med.size top10 hits/n     n  TFs med.size top10 hits/n
+  all                    128   70       75 0.352  45/128  151   85       79 0.338  51/151 
+  <= 60                   50   39       19 0.180   9/50    58   46       23 0.172  10/58  
+  61-150                  45   20       97 0.422  19/45    53   24       91 0.340  18/53  
+  > 150                   33   11      425 0.515  17/33    40   15      447 0.575  23/40  
+  NOTE: accounting only. The SELF-EDGE's label tracks how well studied a TF is (median regulon
+  78 targets for default vs 186 for PMID), but the WHOLE-REGULON default fraction in this block
+  does not: TF-level Spearman(default fraction, regulon size) = -0.02, p = 0.81, and the two
+  halves' median sizes are 75 and 79 (V-017 (5)). Block 4 is therefore not confounded by size,
+  it is flat: the difference is +0.014 with TF-cluster 95% CI [-0.14, +0.17]. No mechanism is
+  claimed and 'sign quality does not limit ULM' is not established, only 'cannot tell at this n'.

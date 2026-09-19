@@ -1,0 +1,280 @@
+exp,tf,masked_frac,hit10,hit5,regulon_size,own_logfc,sign_class
+DataSet_01_006,PROX1,0.16057441253263707,False,False,34,-1.13977,activator-majority
+DataSet_01_007,NR2F2,0.32114882506527415,False,False,79,-1.34696,repressor-majority
+DataSet_01_008,WT1,0.31592689295039167,False,False,151,-1.11474,activator-majority
+DataSet_01_010,TP53,0.007832898172323759,True,True,931,-3.13745,activator-majority
+DataSet_01_011,TP53,0.2989556135770235,False,False,931,-2.43895,activator-majority
+DataSet_01_012,FLI1,0.1866840731070496,False,False,93,-1.46311,activator-majority
+DataSet_01_013,FLI1,0.030026109660574413,True,True,93,-2.12989,activator-majority
+DataSet_01_014,FLI1,0.14490861618798956,False,False,93,-1.62202,activator-majority
+DataSet_01_015,FLI1,0.24673629242819844,False,False,93,-1.08896,activator-majority
+DataSet_01_016,FLI1,0.0195822454308094,True,True,93,-1.26522,activator-majority
+DataSet_01_017,ERG,0.26631853785900783,False,False,56,-2.34525,no default edges
+DataSet_01_018,YY1,0.5248041775456919,False,False,252,-2.07726,activator-majority
+DataSet_01_021,STAT1,0.014360313315926894,True,True,294,-1.36,activator-majority
+DataSet_01_025,MITF,0.006527415143603133,True,True,109,-1.04766,activator-majority
+DataSet_01_026,PAX3,0.20365535248041775,False,False,113,-1.25574,activator-majority
+DataSet_01_027,PAX3,0.19712793733681463,False,False,113,-1.05249,activator-majority
+DataSet_01_030,RELA,0.0026109660574412533,True,True,540,-2.00711,activator-majority
+DataSet_01_031,TP53,0.020887728459530026,True,True,931,-3.46451,activator-majority
+DataSet_01_033,ATF3,0.14490861618798956,False,False,108,-1.92622,repressor-majority
+DataSet_01_034,EGR3,0.04960835509138381,True,True,32,-1.91759,activator-majority
+DataSet_01_036,ETV1,0.9804177545691906,False,False,21,-1.87871,no default edges
+DataSet_01_037,TP53,0.7663185378590078,False,False,931,-1.7844,activator-majority
+DataSet_01_038,TP53,0.0013054830287206266,True,True,931,-1.36,activator-majority
+DataSet_01_042,POU5F1,0.0013054830287206266,True,True,89,-2.46487,activator-majority
+DataSet_01_044,MYB,0.031331592689295036,True,True,177,-1.99639,activator-majority
+DataSet_01_049,STAT3,0.3302872062663185,False,False,425,-2.85367,no default edges
+DataSet_01_051,RARA,0.9947780678851175,False,False,182,-1.27545,activator-majority
+DataSet_01_053,TFAP2C,0.0039164490861618795,True,True,34,-2.27423,activator-majority
+DataSet_01_058,BACH1,0.0013054830287206266,True,True,15,-2.42937,tie / no PMID
+DataSet_01_059,BACH1,0.0013054830287206266,True,True,15,-2.50171,tie / no PMID
+DataSet_01_060,NFE2L2,0.0026109660574412533,True,True,196,-2.87887,activator-majority
+DataSet_01_068,TP53,0.044386422976501305,True,True,931,-4.44308,activator-majority
+DataSet_01_071,ELF5,0.4216710182767624,False,False,10,-1.7665,repressor-majority
+DataSet_01_073,ZNF148,0.007832898172323759,True,True,31,-1.32859,activator-majority
+DataSet_01_074,CEBPD,0.12532637075718014,False,False,94,-1.47847,activator-majority
+DataSet_01_075,CEBPZ,0.5221932114882507,False,False,18,-1.47229,activator-majority
+DataSet_01_076,ETS1,0.5352480417754569,False,False,206,-1.41362,no default edges
+DataSet_01_077,FOXM1,0.3877284595300261,False,False,97,-1.52687,no default edges
+DataSet_01_078,HSF2,0.28720626631853785,False,False,25,-1.50714,activator-majority
+DataSet_01_079,MITF,0.3720626631853786,False,False,109,-3.45338,activator-majority
+DataSet_01_080,RELA,0.04046997389033943,True,True,540,-1.02265,activator-majority
+DataSet_01_081,SP1,0.0013054830287206266,True,True,1260,-1.20083,activator-majority
+DataSet_01_083,STAT1,0.35900783289817234,False,False,294,-1.42141,activator-majority
+DataSet_01_084,STAT3,0.1618798955613577,False,False,425,-1.94704,no default edges
+DataSet_01_085,STAT6,0.3224543080939948,False,False,124,-1.03356,activator-majority
+DataSet_01_086,HIF1A,0.0013054830287206266,True,True,447,-2.143,activator-majority
+DataSet_01_088,FOXP1,0.16840731070496084,False,False,33,-1.35282,repressor-majority
+DataSet_01_089,NR2F2,0.6932114882506527,False,False,79,-3.82418,repressor-majority
+DataSet_01_090,NR2F2,0.5469973890339426,False,False,79,-1.00829,repressor-majority
+DataSet_01_091,ETV6,0.9765013054830287,False,False,27,-1.3224,repressor-majority
+DataSet_01_094,NANOG,0.20757180156657964,False,False,59,-1.55195,repressor-majority
+DataSet_01_095,POU5F1,0.010443864229765013,True,True,89,-2.36646,activator-majority
+DataSet_01_096,SOX2,0.0026109660574412533,True,True,88,-2.0889,no default edges
+DataSet_01_098,SALL4,0.26240208877284593,False,False,21,-1.30794,no default edges
+DataSet_01_099,FOS,0.8681462140992167,False,False,330,-1.23434,activator-majority
+DataSet_01_101,IRF6,0.5469973890339426,False,False,15,-1.60997,activator-majority
+DataSet_01_103,HNF1B,0.020887728459530026,True,True,65,-1.0585,activator-majority
+DataSet_01_105,FOXA1,0.04960835509138381,True,True,69,-1.75809,activator-majority
+DataSet_01_112,HSF1,0.381201044386423,False,False,98,-1.08589,activator-majority
+DataSet_01_114,ARID1A,0.7898172323759791,False,False,8,-1.06589,activator-majority
+DataSet_01_117,ID1,0.8211488250652742,False,False,77,-1.33333,repressor-majority
+DataSet_01_118,ID1,0.16579634464751958,False,False,77,-2.39931,repressor-majority
+DataSet_01_121,ZIC2,0.5182767624020888,False,False,7,-3.17208,tie / no PMID
+DataSet_01_123,ZNF91,0.4699738903394256,False,False,48,-2.18049,repressor-majority
+DataSet_01_132,EGR4,0.05221932114882506,True,False,15,-1.1066,activator-majority
+DataSet_01_135,SPDEF,0.1514360313315927,False,False,19,-1.04132,activator-majority
+DataSet_01_136,REST,0.0013054830287206266,True,True,73,-1.42747,no default edges
+DataSet_01_138,IKZF1,0.9673629242819843,False,False,51,-1.02215,activator-majority
+DataSet_01_142,LEF1,0.10966057441253264,False,False,116,-1.61584,no default edges
+DataSet_01_145,REST,0.0013054830287206266,True,True,73,-1.19468,no default edges
+DataSet_01_147,EHF,0.391644908616188,False,False,13,-1.91277,activator-majority
+DataSet_01_148,MYBL2,0.19973890339425587,False,False,51,-1.52657,activator-majority
+DataSet_01_149,ETS2,0.9569190600522193,False,False,105,-1.04667,no default edges
+DataSet_01_150,TFAP2C,0.009138381201044387,True,True,34,-2.62373,activator-majority
+DataSet_01_151,TEAD4,0.03524804177545692,True,True,11,-1.66583,no default edges
+DataSet_01_154,STAT1,0.48433420365535246,False,False,294,-1.16067,activator-majority
+DataSet_01_155,HSF1,0.02610966057441253,True,True,98,-3.16222,activator-majority
+DataSet_01_156,HIF1A,0.031331592689295036,True,True,447,-2.85412,activator-majority
+DataSet_01_162,ELK1,0.2950391644908616,False,False,58,-1.74762,no default edges
+DataSet_01_164,JUN,0.02741514360313316,True,True,637,-3.11636,activator-majority
+DataSet_01_165,MAF,0.04699738903394256,True,True,62,-8.52636,activator-majority
+DataSet_01_166,NFATC3,0.6932114882506527,False,False,40,-1.78257,activator-majority
+DataSet_01_168,STAT3,0.0026109660574412533,True,True,425,-1.77563,no default edges
+DataSet_01_169,HOXB7,0.10704960835509138,False,False,23,-3.53249,activator-majority
+DataSet_01_170,HOXB7,0.9647519582245431,False,False,23,-2.7728,activator-majority
+DataSet_01_171,FOSL1,0.5195822454308094,False,False,50,-1.41633,activator-majority
+DataSet_01_173,ESRRG,0.26762402088772846,False,False,26,-1.14821,activator-majority
+DataSet_01_175,TP53,0.005221932114882507,True,True,931,-2.24874,activator-majority
+DataSet_01_176,NR2F2,0.283289817232376,False,False,79,-2.13662,repressor-majority
+DataSet_01_177,NR2F2,0.3342036553524804,False,False,79,-2.04676,repressor-majority
+DataSet_01_180,STAT3,0.9725848563968669,False,False,425,-1.25806,no default edges
+DataSet_01_183,TP63,0.04308093994778068,True,True,198,-1.01935,activator-majority
+DataSet_01_184,STAT3,0.006527415143603133,True,True,425,-2.20116,no default edges
+DataSet_01_185,TCF4,0.7689295039164491,False,False,56,-1.94197,activator-majority
+DataSet_01_189,SPDEF,0.9308093994778068,False,False,19,-1.49909,activator-majority
+DataSet_01_192,AR,0.43994778067885115,False,False,493,-1.3753,activator-majority
+DataSet_01_196,TP63,0.1279373368146214,False,False,198,-1.31678,activator-majority
+DataSet_01_198,TP63,0.09399477806788512,True,False,198,-1.73883,activator-majority
+DataSet_01_200,TP63,0.2793733681462141,False,False,198,-1.21925,activator-majority
+DataSet_01_203,XBP1,0.45822454308093996,False,False,53,-2.69096,activator-majority
+DataSet_01_204,XBP1,0.07180156657963446,True,False,53,-1.83171,activator-majority
+DataSet_01_211,REST,0.0013054830287206266,True,True,73,-1.90083,no default edges
+DataSet_01_213,SOX11,0.11879895561357702,False,False,11,-1.94653,activator-majority
+DataSet_01_214,BCLAF1,0.5274151436031331,False,False,8,-1.2932,activator-majority
+DataSet_01_217,TAL1,0.1475195822454308,False,False,94,-2.05844,activator-majority
+DataSet_01_220,HIF1A,0.007832898172323759,True,True,447,-1.23384,activator-majority
+DataSet_01_222,KLF9,0.43733681462140994,False,False,25,-2.95993,activator-majority
+DataSet_01_223,FOXM1,0.24673629242819844,False,False,97,-3.69268,no default edges
+DataSet_01_224,HIF1A,0.016971279373368148,True,True,447,-1.95443,activator-majority
+DataSet_01_226,KLF2,0.5757180156657964,False,False,66,-1.74897,tie / no PMID
+DataSet_01_228,HIF1A,0.005221932114882507,True,True,447,-1.68165,activator-majority
+DataSet_01_233,FOXA1,0.13968668407310705,False,False,69,-1.43603,activator-majority
+DataSet_01_238,NFYB,0.08746736292428199,True,False,40,-2.46407,activator-majority
+DataSet_01_244,ETS1,0.05613577023498695,True,False,206,-2.27346,no default edges
+DataSet_01_246,TLX1,0.95822454308094,False,False,10,-1.99088,activator-majority
+DataSet_01_247,GATA6,0.10443864229765012,False,False,84,-1.15245,activator-majority
+DataSet_01_248,SMAD2,0.17754569190600522,False,False,103,-1.43249,no default edges
+DataSet_01_255,YBX1,0.6710182767624021,False,False,91,-1.44835,repressor-majority
+DataSet_01_256,YBX1,0.12402088772845953,False,False,91,-1.6777,repressor-majority
+DataSet_01_257,YBX1,0.7467362924281984,False,False,91,-1.3417,repressor-majority
+DataSet_01_258,YBX1,0.2258485639686684,False,False,91,-1.78501,repressor-majority
+DataSet_01_260,SOX4,0.17885117493472585,False,False,22,-3.22029,activator-majority
+DataSet_01_261,NFKB2,0.2793733681462141,False,False,73,-1.50026,activator-majority
+DataSet_01_267,FOXO3,0.2989556135770235,False,False,191,-1.83034,activator-majority
+DataSet_01_269,SIX4,0.5718015665796344,False,False,7,-3.3989,activator-majority
+DataSet_01_277,SALL4,0.587467362924282,False,False,21,-1.96854,no default edges
+DataSet_01_280,ESRRA,0.2950391644908616,False,False,49,-1.91149,no default edges
+DataSet_01_281,MSX1,0.03263707571801567,True,True,26,-4.25376,repressor-majority
+DataSet_01_282,IRF7,0.3237597911227154,False,False,31,-1.8021,no default edges
+DataSet_01_283,AHR,0.037859007832898174,True,True,191,-1.92282,activator-majority
+DataSet_01_295,TFAP4,0.5796344647519582,False,False,37,-3.08766,repressor-majority
+DataSet_01_299,SOX7,0.12532637075718014,False,False,6,-1.87406,activator-majority
+DataSet_01_300,SOX17,0.11618798955613577,False,False,45,-2.02528,repressor-majority
+DataSet_01_304,ETV5,0.9738903394255874,False,False,23,-1.12304,no default edges
+DataSet_01_305,HOXA5,0.42950391644908614,False,False,16,-1.5133,activator-majority
+DataSet_01_306,NR2E1,0.097911227154047,True,False,17,-1.10318,repressor-majority
+DataSet_01_308,SOX9,0.17493472584856398,False,False,104,-1.10787,no default edges
+DataSet_01_309,SOX9,0.17493472584856398,False,False,104,-1.10787,no default edges
+DataSet_01_312,TFAP2C,0.14882506527415143,False,False,34,-1.5329,activator-majority
+DataSet_01_318,ELK3,0.44386422976501305,False,False,27,-2.82074,repressor-majority
+DataSet_01_324,MYC,0.0013054830287206266,True,True,845,-1.68378,activator-majority
+DataSet_01_327,TP63,0.033942558746736295,True,True,198,-2.18471,activator-majority
+DataSet_01_330,TP63,0.033942558746736295,True,True,198,-2.18471,activator-majority
+DataSet_01_332,TOX,0.37989556135770236,False,False,5,-1.15678,tie / no PMID
+DataSet_01_333,HOXC6,0.3328981723237598,False,False,12,-2.32533,tie / no PMID
+DataSet_01_336,GRHL3,0.2010443864229765,False,False,28,-3.45616,tie / no PMID
+DataSet_01_337,REST,0.0013054830287206266,True,True,73,-2.52843,no default edges
+DataSet_01_338,REST,0.0013054830287206266,True,True,73,-2.7384,no default edges
+DataSet_01_339,KLF4,0.8746736292428199,False,False,128,-1.46365,activator-majority
+DataSet_01_340,KLF7,0.7872062663185379,False,False,11,-1.53167,tie / no PMID
+DataSet_01_342,KLF7,0.4830287206266319,False,False,11,-1.84779,tie / no PMID
+DataSet_01_347,GATA3,0.8067885117493473,False,False,182,-1.49625,activator-majority
+DataSet_01_348,HIF1A,0.0013054830287206266,True,True,447,-2.45837,activator-majority
+DataSet_01_349,SOX2,0.013054830287206266,True,True,88,-1.66135,no default edges
+DataSet_01_354,ELK1,0.5248041775456919,False,False,58,-1.46354,no default edges
+DataSet_01_356,ETV4,0.9138381201044387,False,False,62,-1.64145,no default edges
+DataSet_01_357,CDX2,0.7493472584856397,False,False,77,-1.29555,no default edges
+DataSet_01_360,SOX17,0.3328981723237598,False,False,45,-1.7728,repressor-majority
+DataSet_02_015,HOXB9,0.19973890339425587,False,False,6,-1.13412,no default edges
+DataSet_02_016,JUND,0.024804177545691905,True,True,104,-1.25221,activator-majority
+DataSet_02_018,STAT2,0.07571801566579635,True,False,49,-1.70754,activator-majority
+DataSet_02_023,STAT1,0.9151436031331592,False,False,294,-1.72967,activator-majority
+DataSet_02_025,USF2,0.8877284595300261,False,False,112,-1.99826,activator-majority
+DataSet_02_026,USF1,0.8120104438642297,False,False,221,-1.84996,activator-majority
+DataSet_02_032,NFE2L1,0.030026109660574413,True,True,9,-1.56069,activator-majority
+DataSet_02_033,TEAD2,0.8002610966057441,False,False,6,-2.60937,no default edges
+DataSet_02_039,RELA,0.0013054830287206266,True,True,540,-1.39551,activator-majority
+DataSet_02_040,TEAD4,0.741514360313316,False,False,11,-1.5798,no default edges
+DataSet_02_042,SP2,0.5600522193211488,False,False,22,-2.02074,activator-majority
+DataSet_02_048,SMAD5,0.006527415143603133,True,True,35,-1.81161,activator-majority
+DataSet_02_054,ATF3,0.38511749347258484,False,False,108,-1.86056,repressor-majority
+DataSet_02_055,DLX1,0.6971279373368147,False,False,10,-1.25001,repressor-majority
+DataSet_02_061,RFX5,0.664490861618799,False,False,24,-1.58857,tie / no PMID
+DataSet_02_063,TRIM28,0.5704960835509139,False,False,6,-1.46428,repressor-majority
+DataSet_02_071,TFDP1,0.8929503916449086,False,False,31,-2.45296,no default edges
+DataSet_02_075,HMGA1,0.8263707571801566,False,False,73,-1.97429,activator-majority
+DataSet_02_082,ZBTB33,0.21801566579634465,False,False,11,-1.43836,repressor-majority
+DataSet_02_104,HDGF,0.3133159268929504,False,False,7,-3.16823,activator-majority
+DataSet_02_172,ZFX,0.7180156657963447,False,False,5,-1.76132,repressor-majority
+DataSet_02_185,CTCF,0.8942558746736292,False,False,137,-1.26009,activator-majority
+DataSet_02_192,MAX,0.3877284595300261,False,False,49,-1.07684,activator-majority
+DataSet_02_206,ZFX,0.4308093994778068,False,False,5,-2.40204,repressor-majority
+DataSet_03_004,AR,0.9503916449086162,False,False,493,-1.84288,activator-majority
+DataSet_03_005,AR,0.8185378590078329,False,False,493,-1.765544,activator-majority
+DataSet_03_007,AR,0.36945169712793735,False,False,493,-2.045341,activator-majority
+DataSet_03_013,ARID1A,0.5052219321148825,False,False,8,-1.27036,activator-majority
+DataSet_03_017,ATF3,0.6109660574412533,False,False,108,-1.260501,repressor-majority
+DataSet_03_018,ATF4,0.009138381201044387,True,True,121,-2.426447,no default edges
+DataSet_03_026,BCL6,0.0013054830287206266,True,True,99,-1.080475,repressor-majority
+DataSet_03_049,CEBPB,0.0013054830287206266,True,True,444,-2.360576,activator-majority
+DataSet_03_056,CTCF,0.08746736292428199,True,False,137,-2.009543,activator-majority
+DataSet_03_059,CTNNB1,0.7976501305483029,False,False,331,-3.872987,no default edges
+DataSet_03_060,E2F1,0.009138381201044387,True,True,306,-1.801817,no default edges
+DataSet_03_063,E2F7,0.7506527415143603,False,False,7,-1.445059,no default edges
+DataSet_03_065,EP300,0.5313315926892951,False,False,73,-1.72724,activator-majority
+DataSet_03_073,ETS1,0.04177545691906005,True,True,206,-1.201786,no default edges
+DataSet_03_074,ETS1,0.05483028720626632,True,False,206,-1.195833,no default edges
+DataSet_03_075,ETV6,0.860313315926893,False,False,27,-2.238372,repressor-majority
+DataSet_03_078,FLI1,0.9882506527415144,False,False,93,-1.915758,activator-majority
+DataSet_03_080,FOXA1,0.020887728459530026,True,True,69,-1.392308,activator-majority
+DataSet_03_085,FOXD1,0.31462140992167104,False,False,6,-2.771563,repressor-majority
+DataSet_03_087,FOXF2,0.9242819843342036,False,False,12,-1.079575,tie / no PMID
+DataSet_03_090,FOXM1,0.01174934725848564,True,True,97,-3.169468,no default edges
+DataSet_03_091,FOXM1,0.20365535248041775,False,False,97,-2.553802,no default edges
+DataSet_03_093,FOXM1,0.21018276762402088,False,False,97,-1.980335,no default edges
+DataSet_03_096,FOXO1,0.1227154046997389,False,False,265,-3.68757,no default edges
+DataSet_03_100,GATA2,0.08485639686684072,True,False,97,-1.408143,no default edges
+DataSet_03_108,GATA6,0.3289817232375979,False,False,84,-1.123892,activator-majority
+DataSet_03_110,GATA6,0.013054830287206266,True,True,84,-1.090599,activator-majority
+DataSet_03_113,GRHL3,0.19451697127937337,False,False,28,-1.841626,tie / no PMID
+DataSet_03_114,HDAC3,0.7741514360313316,False,False,27,-1.015974,repressor-majority
+DataSet_03_116,HES6,0.3720626631853786,False,False,9,-1.285988,repressor-majority
+DataSet_03_117,HES6,0.2258485639686684,False,False,9,-1.006761,repressor-majority
+DataSet_03_119,HIF1A,0.11879895561357702,False,False,447,-1.099027,activator-majority
+DataSet_03_122,HINFP,0.7467362924281984,False,False,10,-1.047697,repressor-majority
+DataSet_03_123,HINFP,0.6579634464751958,False,False,10,-1.642653,repressor-majority
+DataSet_03_124,HMGA1,0.06657963446475196,True,False,73,-1.659763,activator-majority
+DataSet_03_127,HOXB7,0.4608355091383812,False,False,23,-1.154571,activator-majority
+DataSet_03_129,HSF1,0.009138381201044387,True,True,98,-1.158558,activator-majority
+DataSet_03_143,JUN,0.013054830287206266,True,True,637,-1.909138,activator-majority
+DataSet_03_148,KLF5,0.01174934725848564,True,True,76,-1.296036,activator-majority
+DataSet_03_149,KLF5,0.06135770234986945,True,False,76,-1.755019,activator-majority
+DataSet_03_150,KLF5,0.6449086161879896,False,False,76,-1.362161,activator-majority
+DataSet_03_151,KLF5,0.34203655352480417,False,False,76,-1.889237,activator-majority
+DataSet_03_155,MAFB,0.1618798955613577,False,False,46,-2.11,activator-majority
+DataSet_03_165,MITF,0.009138381201044387,True,True,109,-1.083814,activator-majority
+DataSet_03_168,MITF,0.07571801566579635,True,False,109,-1.354155,activator-majority
+DataSet_03_173,MYB,0.08746736292428199,True,False,177,-2.037667,activator-majority
+DataSet_03_178,MYC,0.0013054830287206266,True,True,845,-1.985984,activator-majority
+DataSet_03_189,NCOA1,0.005221932114882507,True,True,89,-3.616286,activator-majority
+DataSet_03_190,NCOA2,0.010443864229765013,True,True,61,-2.297202,activator-majority
+DataSet_03_191,NCOA3,0.8746736292428199,False,False,74,-1.881659,activator-majority
+DataSet_03_192,NCOR1,0.12924281984334204,False,False,88,-1.994582,repressor-majority
+DataSet_03_202,NR2F2,0.006527415143603133,True,True,79,-1.622046,repressor-majority
+DataSet_03_205,PARK7,0.4934725848563969,False,False,7,-4.931629,no default edges
+DataSet_03_207,PBX1,0.7101827676240209,False,False,62,-1.86539,no default edges
+DataSet_03_208,PBX1,0.6814621409921671,False,False,62,-1.237863,no default edges
+DataSet_03_209,PBX1,0.8263707571801566,False,False,62,-1.123829,no default edges
+DataSet_03_214,PPARG,0.0195822454308094,True,True,342,-1.296667,activator-majority
+DataSet_03_217,PRRX1,0.7036553524804178,False,False,6,-1.515082,no default edges
+DataSet_03_222,RELA,0.015665796344647518,True,True,540,-1.321429,activator-majority
+DataSet_03_223,RELA,0.006527415143603133,True,True,540,-1.413095,activator-majority
+DataSet_03_225,RELB,0.22845953002610966,False,False,56,-1.64003,activator-majority
+DataSet_03_228,REST,0.0013054830287206266,True,True,73,-1.235054,no default edges
+DataSet_03_229,SATB1,0.005221932114882507,True,True,45,-1.656688,activator-majority
+DataSet_03_235,SMARCA4,0.9503916449086162,False,False,10,-2.833681,no default edges
+DataSet_03_236,SMARCC1,0.6932114882506527,False,False,9,-2.48754,activator-majority
+DataSet_03_237,SOX11,0.20496083550913838,False,False,11,-2.317003,activator-majority
+DataSet_03_238,SOX11,0.1866840731070496,False,False,11,-3.157368,activator-majority
+DataSet_03_239,SOX11,0.0013054830287206266,True,True,11,-2.349537,activator-majority
+DataSet_03_241,SOX2,0.43733681462140994,False,False,88,-2.290736,no default edges
+DataSet_03_242,SOX2,0.050913838120104436,True,False,88,-3.135283,no default edges
+DataSet_03_244,SOX2,0.009138381201044387,True,True,88,-3.879367,no default edges
+DataSet_03_246,SOX4,0.8746736292428199,False,False,22,-1.275064,activator-majority
+DataSet_03_249,SP1,0.7702349869451697,False,False,1260,-1.225976,activator-majority
+DataSet_03_251,SP1,0.10835509138381201,False,False,1260,-3.774837,activator-majority
+DataSet_03_253,SPIB,0.35117493472584854,False,False,18,-1.325308,activator-majority
+DataSet_03_255,SSRP1,0.5835509138381201,False,False,146,-1.9457,tie / no PMID
+DataSet_03_256,STAT1,0.11488250652741515,False,False,294,-1.1724,activator-majority
+DataSet_03_258,STAT3,0.04960835509138381,True,True,425,-1.738924,no default edges
+DataSet_03_259,STAT3,0.5613577023498695,False,False,425,-1.056171,no default edges
+DataSet_03_260,STAT3,0.7349869451697127,False,False,425,-1.398193,no default edges
+DataSet_03_261,STAT3,0.02741514360313316,True,True,425,-1.941823,no default edges
+DataSet_03_262,STAT3,0.9751958224543081,False,False,425,-3.033125,no default edges
+DataSet_03_264,STAT6,0.9321148825065274,False,False,124,-1.961393,activator-majority
+DataSet_03_267,TCF7L1,0.06657963446475196,True,False,6,-2.212681,no default edges
+DataSet_03_274,TFAP2C,0.10052219321148825,False,False,34,-1.867441,activator-majority
+DataSet_03_275,TFE3,0.0926892950391645,True,False,37,-1.444595,activator-majority
+DataSet_03_277,TP53,0.29112271540469975,False,False,931,-1.072749,activator-majority
+DataSet_03_284,TWIST2,0.19451697127937337,False,False,34,-2.501369,repressor-majority
+DataSet_03_287,ZHX2,0.31201044386422977,False,False,11,-1.334165,no default edges
+DataSet_04_015,NKRF,0.206266318537859,False,False,9,-1.789867,activator-majority
+DataSet_04_019,SMAD2,0.9543080939947781,False,False,103,-1.081641,no default edges
+DataSet_04_020,SMAD4,0.3368146214099217,False,False,136,-1.664538,no default edges
+DataSet_04_022,STAT1,0.8707571801566579,False,False,294,-1.722998,activator-majority
+DataSet_04_024,YBX1,0.5678851174934726,False,False,91,-1.881032,repressor-majority
+DataSet_04_036,SMAD2,0.5861618798955613,False,False,103,-1.559244,no default edges
+DataSet_04_037,SMAD4,0.13577023498694518,False,False,136,-1.404555,no default edges
+DataSet_04_041,YBX1,0.07049608355091384,True,False,91,-2.02517,repressor-majority

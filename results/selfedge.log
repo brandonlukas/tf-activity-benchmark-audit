@@ -1,0 +1,95 @@
+ulm            top10%=0.45 top5%=0.35
+ulm hub_corr (mean |score| vs TF-TF degree) = 0.63
+direction norm  alpha  top10  top5  better  worse  hub_corr
+       up  sum   0.50   0.57  0.47    0.59   0.37      0.85
+       up  sum   0.25   0.57  0.48    0.63   0.33      0.87
+     both  sum   0.25   0.55  0.44    0.58   0.38      0.92
+       up  sum   1.00   0.55  0.44    0.58   0.39      0.85
+       up  sum   2.00   0.54  0.43    0.57   0.41      0.84
+     both  sum   0.50   0.53  0.43    0.55   0.42      0.92
+     both  sum   1.00   0.53  0.42    0.53   0.46      0.92
+     both  sum   2.00   0.52  0.41    0.53   0.45      0.92
+       up mean   1.00   0.51  0.42    0.61   0.33      0.32
+       up mean   2.00   0.51  0.38    0.54   0.42      0.10
+       up mean   0.50   0.49  0.41    0.65   0.25      0.52
+     both mean   1.00   0.49  0.38    0.51   0.43      0.32
+     both mean   0.50   0.48  0.37    0.54   0.35      0.51
+       up mean   0.25   0.47  0.39    0.68   0.20      0.60
+     both mean   0.25   0.46  0.36    0.59   0.27      0.59
+     both mean   2.00   0.45  0.34    0.43   0.53      0.07
+     down mean   0.25   0.45  0.35    0.39   0.46      0.59
+     down mean   0.50   0.43  0.34    0.36   0.55      0.50
+     down  sum   0.25   0.42  0.28    0.43   0.53      0.80
+     down mean   1.00   0.41  0.29    0.32   0.62      0.29
+     down  sum   0.50   0.38  0.27    0.41   0.57      0.81
+     down  sum   1.00   0.35  0.23    0.38   0.61      0.82
+     down  sum   2.00   0.33  0.21    0.36   0.63      0.82
+     down mean   2.00   0.32  0.19    0.29   0.68      0.01
+
+variant                          top10  top5  better worse
+ulm                              0.45   0.35  0.00   0.00
+up sum a=0.5                     0.57   0.47  0.59   0.37
+up sum a=0.5 SHUF x10 mean       0.31   0.19  [0.28-0.33] [0.16-0.22]
+up mean a=1                      0.51   0.42  0.61   0.33
+up mean a=1 SHUF x10 mean        0.42   0.31  [0.41-0.43] [0.30-0.32]
+ulm + 0.5*own mRNA               0.66   0.56  0.91   0.01
+ulm + 1*own mRNA                 0.77   0.67  0.91   0.02
+ulm + 2*own mRNA                 0.94   0.86  0.89   0.03
+ulm + 1*own + up mean a=1        0.77   0.66  0.85   0.09
+
+variant (own mRNA masked)        top10  top5  better worse
+ulm                              0.34   0.28  0.00   0.00
+up sum a=0.5                     0.28   0.16  0.42   0.57
+up sum a=0.5 SHUF x10 mean       0.26   0.16  [0.24-0.27] [0.14-0.20]
+up mean a=1                      0.34   0.22  0.39   0.57
+up mean a=1 SHUF x10 mean        0.33   0.24  [0.31-0.35] [0.23-0.25]
+
+279 experiments, 155 TFs; 197 experiments (71%) whose perturbed TF has a CollecTRI self-edge surviving tmin=5, 82 without; 0 whose gene is not in the scored matrix at all
+self-edges in the pruned network: 412 of 766 TFs
+
+(1) plain ULM unmasked vs own-gene-masked, split by self-edge (better/worse = masked vs unmasked ULM, within group)
+group                              top10   hits/n    top5  better worse
+self-edge: unmasked                0.538   106/197  0.426  0.00   0.00
+self-edge: MASKED                  0.386    76/197  0.315  0.11   0.81
+no self-edge: unmasked             0.244    20/82   0.183  0.00   0.00
+no self-edge: MASKED               0.244    20/82   0.195  0.24   0.07
+
+(2) decomposition of the 0.45 -> 0.34 drop, all experiments (better/worse vs unmasked full-network ULM)
+variant                            top10   hits/n    top5  better worse
+ulm (full net)                     0.452   126/279  0.355  0.00   0.00
+no self-edge                       0.344    96/279  0.272  0.06   0.59
+no other regulon                   0.455   127/279  0.366  0.41   0.04
+gene off network                   0.348    97/279  0.283  0.15   0.58
+masked (leak.py)                   0.344    96/279  0.280  0.15   0.59
+    same, restricted to the self-edge group
+  ulm (full net)                   0.538   106/197  0.426  0.00   0.00
+  no self-edge                     0.386    76/197  0.310  0.09   0.84
+  no other regulon                 0.543   107/197  0.437  0.48   0.04
+  gene off network                 0.391    77/197  0.320  0.11   0.81
+  masked (leak.py)                 0.386    76/197  0.315  0.11   0.81
+    same, restricted to the NO-self-edge group
+  ulm (full net)                   0.244    20/82   0.183  0.00   0.00
+  no self-edge                     0.244    20/82   0.183  0.00   0.00
+  no other regulon                 0.244    20/82   0.195  0.24   0.04
+  gene off network                 0.244    20/82   0.195  0.24   0.04
+  masked (leak.py)                 0.244    20/82   0.195  0.24   0.07
+
+(3) same decomposition under up/sum/alpha=0.5 propagation (0.57 unmasked -> 0.28 masked in F-004; better/worse vs unmasked plain ULM)
+variant + propagation              top10   hits/n    top5  better worse
+ulm (full net)                     0.566   158/279  0.473  0.59   0.37
+no self-edge                       0.538   150/279  0.434  0.57   0.39
+no other regulon                   0.326    91/279  0.222  0.35   0.64
+gene off network                   0.280    78/279  0.186  0.33   0.66
+masked (leak.py)                   0.276    77/279  0.165  0.32   0.66
+    same, restricted to the self-edge group
+  ulm (full net)                   0.660   130/197  0.569  0.59   0.38
+  no self-edge                     0.619   122/197  0.513  0.56   0.41
+  no other regulon                 0.376    74/197  0.259  0.29   0.70
+  gene off network                 0.310    61/197  0.208  0.26   0.73
+  masked (leak.py)                 0.310    61/197  0.178  0.26   0.73
+    same, restricted to the NO-self-edge group
+  ulm (full net)                   0.341    28/82   0.244  0.60   0.35
+  no self-edge                     0.341    28/82   0.244  0.60   0.35
+  no other regulon                 0.207    17/82   0.134  0.49   0.49
+  gene off network                 0.207    17/82   0.134  0.49   0.49
+  masked (leak.py)                 0.195    16/82   0.134  0.48   0.50

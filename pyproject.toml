@@ -1,0 +1,14 @@
+[project]
+name = "tf-activity-benchmark-audit"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "decoupler>=2.2.0",
+    "matplotlib>=3.11.2",
+    "numpy>=2.5.3",
+    "omnipath>=1.0.12",
+    "pandas>=3.0.6",
+    "pyarrow>=25.0.1",
+    "scanpy>=1.12.4",
+    "scipy>=1.18.1",
+]

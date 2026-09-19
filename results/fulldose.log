@@ -1,0 +1,74 @@
+
+====================================================================================
+T-034 / F-022  dose-resolved slope check on the UNFILTERED knockTF
+907 experiments in the file, 456 TFs; 643 scored (263 TFs in CollecTRI at tmin=5), 130 TFs with >= 2 scored experiments = 510 experiments
+own logFC from the matrix vs obs.logFC: max |diff| 0.00e+00, 2 TFs not in the matrix (obs.logFC used)
+self-edges in the pruned network: 412 of 766 TFs
+REPRODUCTION of slopecheck.py on the logFC < -1 subset: n 279 (279), TFs 155 (155), multi-exps 176 (176), corr 0.095 (0.095), OLS slope 0.413 (0.413) intercept -0.902 (-0.901), within-TF slope 0.079 (0.079)  -> MATCH
+
+(A1) all 643 scored experiments
+     corr(a, m) = 0.203
+     OLS with intercept: slope 0.565 95% CI [0.29, 0.85]   intercept -0.555 95% CI [-0.91, -0.20]
+       intercept models: through-origin dose-response predicts ~0, pure knockdown offset ~-1.68 (mean a on the deep knockdowns)
+within-TF slope (TF fixed intercepts)          slope    95% TF-cluster CI   exps   TFs
+all multi-experiment TFs                       0.480       [+0.19, +0.74]    510   130  -> EXCLUDES 0
+TFs with within-TF range > 1 logFC             0.469       [+0.17, +0.73]    338    67  -> EXCLUDES 0
+TFs with within-TF range > 2 logFC             0.537       [+0.22, +0.84]    191    31  -> EXCLUDES 0
+     CI spread over 5 bootstrap seeds (500 draws each, V-018 caught a seed artefact): [+0.17,+0.75]  [+0.16,+0.74]  [+0.21,+0.76]  [+0.19,+0.77]  [+0.19,+0.74]
+
+(A2) binned dose-response, self-edge-dropped ULM score of the perturbed TF
+own logFC bin        n   TFs   mean a    95% TF-cluster CI  median a   mean m
+m < -2              85    62    -2.62       [-3.67, -1.67]     -1.58    -2.80
+-2 <= m < -1       194   122    -1.27       [-2.05, -0.64]     -0.78    -1.48
+-1 <= m < -0.5     143    93    -0.81       [-1.41, -0.23]     -0.37    -0.75
+-0.5 <= m < 0      144    99    -0.64       [-1.08, -0.18]     -0.50    -0.27
+m >= 0              77    52    -0.54       [-1.44, +0.41]     -0.02     0.42
+
+(A3) placebo: own logFC permuted across experiments within regulon-size tercile, 500 draws
+     within-TF slope  real +0.480   placebo mean +0.001 (5-95% -0.195 to +0.203); real above 100.0% of placebos
+
+(A4) leave-one-experiment-out on the 510 multi-experiment experiments (everything re-estimated inside the fold)
+predictor of held-out a                       RMSE  med|err|   folds
+null (0)                                      3.56      1.49     510
+global slope x m                              3.29      1.54     510
+per-TF mean                                   2.81      1.55     510
+per-TF mean + pooled within-slope x dm        2.77      1.47     510
+per-TF through-origin slope x m              22.10      1.55     502
+     RMSE(mean + slope) - RMSE(mean) = -0.035  95% TF-cluster CI [-0.112, +0.039]  -> INCLUDES 0, slope better
+
+(A5) confounds. variance of own logFC explained by Knock.Method 0.030, by Platform 0.145 (9 methods, 64 platforms)
+     within-TF slope, TF dummies only        +0.480  (lstsq check of the +0.480 above)
+     within-TF slope, TF + Knock.Method dummies +0.531
+     dose-bin composition by Knock.Method (row fractions):
+method          CRISPR  CRISPRedit  CRISPRi  CRISPRko  esiRNA  knockdown  knockout  shRNA  siRNA
+       bin                                                                                             
+       m < -2            0.02        0.00     0.04      0.00    0.01       0.00      0.00   0.20   0.73
+       -2 <= m < -1      0.04        0.00     0.09      0.00    0.00       0.00      0.01   0.20   0.67
+       -1 <= m < -0.5    0.05        0.00     0.10      0.00    0.00       0.01      0.00   0.22   0.63
+       -0.5 <= m < 0     0.03        0.01     0.07      0.00    0.00       0.00      0.00   0.28   0.60
+       m >= 0            0.00        0.00     0.09      0.01    0.00       0.00      0.04   0.38   0.48
+     leverage: top-5 TFs by within-TF SS(m) = GABPA (65), MAF (33), TP53 (28), SOX2 (19), FOXM1 (14); they are 44% of total SS(m)
+     within-TF slope without them +0.315 95% CI [-0.02, +0.65] (474 exps, 125 TFs) -> INCLUDES 0
+
+(CONTROL) degree-preserving shuffled TF-gene network, 10 seeds (targets redrawn at random, each TF's +1/-1 counts kept)
+                                 m < -2           -2 <= m < -1         -1 <= m < -0.5          -0.5 <= m < 0                 m >= 0
+real mean a                       -2.62                  -1.27                  -0.81                  -0.64                  -0.54
+shuffled mean a     +0.02 [-0.15,+0.17]    +0.00 [-0.11,+0.11]    -0.01 [-0.13,+0.15]    +0.01 [-0.22,+0.13]    -0.05 [-0.17,+0.07]
+     within-TF slope: real +0.480   shuffled mean -0.020 [-0.154, +0.056] over 10 seeds
+
+(B) benchmark by dose bin. rank of the true TF among 766 scored TFs, type_p = -1 convention; chance = 0.10 / 0.05
+variant                bin                  n   top10     hits/n             95% CI    top5             95% CI
+ULM (unmasked)         m < -2              85   0.588      50/85     [0.478, 0.695]   0.482     [0.366, 0.588]
+                       -2 <= m < -1       194   0.392     76/194     [0.316, 0.466]   0.299     [0.227, 0.373]
+                       -1 <= m < -0.5     143   0.315     45/143     [0.217, 0.410]   0.252     [0.163, 0.339]
+                       -0.5 <= m < 0      144   0.250     36/144     [0.161, 0.348]   0.174     [0.094, 0.259]
+                       m >= 0              77   0.299      23/77     [0.171, 0.424]   0.208     [0.105, 0.324]
+  all bins                                643   0.358    230/643                      0.274
+ULM own gene MASKED    m < -2              85   0.471      40/85     [0.351, 0.588]   0.388     [0.267, 0.507]
+                       -2 <= m < -1       194   0.289     56/194     [0.214, 0.365]   0.232     [0.161, 0.303]
+                       -1 <= m < -0.5     143   0.280     40/143     [0.181, 0.374]   0.189     [0.113, 0.267]
+                       -0.5 <= m < 0      144   0.229     33/144     [0.140, 0.328]   0.160     [0.083, 0.242]
+                       m >= 0              77   0.299      23/77     [0.171, 0.424]   0.208     [0.105, 0.324]
+  all bins                                643   0.299    192/643                      0.224
+     masked vs unmasked, paired on 643 experiments: better 0.15  worse 0.53  tied 0.32
+====================================================================================

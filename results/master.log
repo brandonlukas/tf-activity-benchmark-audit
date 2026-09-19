@@ -1,0 +1,58 @@
+
+================================================================================================
+F-029  master record: one row per scored knockTF experiment
+================================================================================================
+907 experiments in data/knocktf_full.h5ad, 456 perturbed TFs, 21985 genes; 766 TFs scored by CollecTRI at tmin=5
+self-edges in the pruned network: 412 of 766 TFs; 435 perturbed-TF gene columns blanked by the symmetric mask; 643 scored experiments over 263 TFs
+
+wrote ../results/master.csv  643 rows x 39 columns (279 in the filtered 279)
+columns: exp, tf, in_filtered_279, profile_id, biosample, knock_method, platform, own_logfc, own_gene_measured, regulon_size, has_self_edge, self_edge_weight, frac_regulon_default, n_studymates, max_jaccard, base_rate10, base_rate5, self_edge_sign_decision, ulm_unmasked_frac, ulm_unmasked_hit10, ulm_unmasked_hit5, ulm_masked_frac, ulm_masked_hit10, ulm_masked_hit5, ulm_masked_symmetric_frac, ulm_masked_symmetric_hit10, ulm_masked_symmetric_hit5, ulm_noselfedge_frac, ulm_noselfedge_hit10, ulm_noselfedge_hit5, ulm_noother_frac, ulm_noother_hit10, ulm_noother_hit5, propagated_unmasked_frac, propagated_unmasked_hit10, propagated_unmasked_hit5, propagated_masked_frac, propagated_masked_hit10, propagated_masked_hit5
+
+------------------------------------------------------------------------------------------------
+VALIDATION: published numbers recomputed from master.csv alone
+------------------------------------------------------------------------------------------------
+entry          quantity                                  published  recomputed  ok
+F-001          ULM unmasked top-10%, 279                     0.452       0.452  .
+F-001          ULM unmasked hits / 279                         126         126  .
+F-001          n experiments (filtered)                        279         279  .
+F-001          n TFs (filtered)                                155         155  .
+F-005/F-013    masked top-10%, 279                           0.344       0.344  .
+F-005/F-013    masked hits / 279                                96          96  .
+F-010          no-self-edge hits / 279                          96          96  .
+F-010          no-other-regulon hits / 279                     127         127  .
+F-010          self-edge experiments                           197         197  .
+F-010          no-self-edge experiments                         82          82  .
+F-010          self-edge group, unmasked top-10%             0.538       0.538  .
+F-010          self-edge group, masked top-10%               0.386       0.386  .
+F-010          no-self-edge group, unmasked top-10%          0.244       0.244  .
+F-010          no-self-edge group, masked top-10%            0.244       0.244  .
+F-011          +1 self-edge experiments                        176         176  .
+F-011          -1 self-edge experiments                         21          21  .
+F-011          +1 group, unmasked hits                          98          98  .
+F-011          +1 group, no-self-edge hits                      65          65  .
+F-011          -1 group, unmasked hits                           8           8  .
+F-011          -1 group, no-self-edge hits                      11          11  .
+F-016/F-017    +1 self-edge, default activation                 92          92  .
+F-016/F-017    +1 self-edge, PMID                               74          74  .
+F-016/F-017    +1 self-edge, regulon                            10          10  .
+F-022          scored experiments (unfiltered)                 643         643  .
+F-022          TFs scored (unfiltered)                         263         263  .
+F-022          masked top-10%, all 643                       0.299       0.299  .
+V-022          per-TF base rate, 279                         0.123       0.122  FAIL
+V-022          per-TF base rate, 643 (where 0.123 is)        0.123       0.123  .
+V-022          per-TF base rate top-5%, 279                  0.067       0.067  .
+F-004          propagated unmasked top-10%, 279              0.566       0.566  .
+F-004          propagated masked top-10%, 279                0.276       0.276  .
+
+30 of 31 reproduce.  MISMATCHES: V-022 per-TF base rate, 279 0.123 -> 0.122
+
+KNOWN MISMATCH, not a bug in this file: V-022's per-TF base rate on the FILTERED 279 is 0.1225 = 0.122, not the 0.123 the Index, the V-022 entry and CLAUDE.md quote.
+  0.123 is this same construction on all 643 SCORED rows (0.1231); V-022 subtracts one figure from both rows.
+  The top-5% companion on the 279 reproduces exactly (0.0666 -> 0.067), and studymate.py already prints 0.122 here (V-028: 'global 0.122'),
+  so the construction is V-022's and the log carries two values for one number. Effect: masked ULM is +0.222 over base on the 279, 2.81x, not +0.221 / 2.80x.
+
+unasserted context: symmetric-mask top-10% 0.348 on the 279 and 0.289 on the 643 (F-028's convention, NOT the 0.344 baseline's)
+  median frac_regulon_default over the 279 0.53 (F-017: 0.53, IQR 0.15-0.62; here 0.15-0.62)
+  -1 self-edge sign_decision on the 21: PMID 20, regulon 1 (F-016: 20 PMID, 1 regulon)
+  top-5%: unmasked 0.355 masked 0.280 (F-005: 0.280); rows with >=1 study-mate 155 of 643
+================================================================================================

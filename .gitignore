@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+data/*.h5ad
+data/*.parquet
+refs/*.pdf
+data/*.xlsx
+data/*.tsv
+data/bench2026/
+data/bench2026_home/
+# results/ is small and IS committed — it is the machine-readable record
+!results/

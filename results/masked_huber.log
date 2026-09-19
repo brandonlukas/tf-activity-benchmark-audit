@@ -1,0 +1,21 @@
+ulm          n=279 top10%=0.45 top5%=0.35 median_frac=0.138 wrong_sign=0.23
+huber_ulm    n=279 top10%=0.32 top5%=0.23 median_frac=0.243 wrong_sign=0.29
+paired: huber better in 0.33 worse in 0.66
+ulm masked   n=279 top10%=0.34 top5%=0.28 median_frac=0.208 wrong_sign=0.29
+huber masked n=279 top10%=0.30 top5%=0.21 median_frac=0.285 wrong_sign=0.33
+
+variant                top10  top5  better  worse   (better/worse = vs ULM in the same mask condition)
+ulm unmasked           0.45   0.35       -      -
+huber unmasked         0.32   0.23    0.33   0.66
+ulm MASKED             0.34   0.28       -      -
+huber MASKED           0.30   0.21    0.40   0.59
+
+n=279 experiments scored; 388 of 388 experiments had their own gene zeroed
+unmasked deficit (ulm - huber, top10) = +0.14; masked deficit = +0.04
+
+self-edge split of the four arms (V-010's condition: W[gene X, column X] != 0), top-10% hits
+group                     n    ulm  huber  ulm_m  hub_m
+self-edge               197    106     68     76     64 
+no self-edge             82     20     20     20     20 
+final Huber weight on the perturbed TF's own gene in its own regression, unmasked, self-edge experiments (n=197): median 0.094, IQR 0.051-0.153; below 1 in 99%, below 0.5 in 97%
+  same weight in the 82 no-self-edge experiments (own gene is a non-target there): median 0.086

@@ -1,0 +1,38 @@
+SIGNOR: 43518 rows -> 4363 directional-activity phosphorylation rows -> 2335 sites on 1043 proteins (50 sites dropped for conflicting up/down annotations)
+phosphoproteome: 9983 non-viral non-contaminant site rows, 211 carry a directional SIGNOR activity annotation (142 proteins)
+transcriptome: 12971 genes, CollecTRI tmin=5 -> 622 scoreable TFs; panel = 19 TFs with a directional site, 33 site rows
+   regulon sizes: 205 109 199 46 57 5 385 17 18 50 24 10 14 29 100 50 196 5 6
+
+=== phospho activity: corrected (mean over the TF's directional sites of sign * site - protein log2FC)
+variant                               n spearman [95% TF-boot] pears  top10  top5  bettr  worse
+ULM (unmasked)                       51 -0.010 [-0.32,+0.32] -0.054  0.06  0.04  nan  nan  
+ULM masked (own gene zeroed)         51 -0.018 [-0.33,+0.33] -0.036  0.04  0.04  0.22  0.39  
+ULM self-edge deleted (F-010)        51 -0.029 [-0.35,+0.32] -0.041  0.04  0.04  0.33  0.53  
+  SHUFFLED net seed 0                51 +0.210 [-0.14,+0.49] +0.172  0.12  0.02  0.57  0.43  
+  SHUFFLED net seed 1                51 +0.021 [-0.36,+0.43] -0.071  0.12  0.04  0.49  0.49  
+  SHUFFLED net seed 2                51 +0.092 [-0.31,+0.47] -0.071  0.18  0.10  0.65  0.35  
+  SHUFFLED net seed 3                51 +0.207 [-0.18,+0.49] +0.034  0.18  0.10  0.59  0.41  
+  SHUFFLED net seed 4                51 +0.025 [-0.33,+0.39] -0.255  0.14  0.08  0.53  0.47  
+  SHUFFLED net seed 5                51 -0.017 [-0.37,+0.36] -0.158  0.06  0.00  0.45  0.55  
+  SHUFFLED net seed 6                51 +0.212 [-0.06,+0.44] +0.049  0.12  0.08  0.57  0.41  
+  SHUFFLED net seed 7                51 -0.009 [-0.36,+0.33] +0.046  0.08  0.06  0.41  0.57  
+  SHUFFLED net seed 8                51 +0.293 [-0.08,+0.57] +0.211  0.04  0.00  0.61  0.39  
+  SHUFFLED net seed 9                51 -0.066 [-0.47,+0.36] -0.095  0.12  0.08  0.49  0.51  
+SHUFFLED net, 10 seeds: mean       +0.097 [-0.066,+0.293]
+PLACEBO ground truth, 500 perms    +0.029 [-0.33,+0.39]  (real masked -0.018, one-sided p = 0.590)
+
+=== phospho activity: uncorrected (mean over the TF's directional sites of sign * site log2FC)
+variant                               n spearman [95% TF-boot] pears  top10  top5  bettr  worse
+ULM (unmasked)                       57 +0.209 [-0.16,+0.54] +0.222  0.07  0.05  nan  nan  
+ULM masked (own gene zeroed)         57 +0.203 [-0.17,+0.55] +0.231  0.05  0.05  0.33  0.32  
+ULM self-edge deleted (F-010)        57 +0.199 [-0.17,+0.54] +0.231  0.07  0.05  0.47  0.40  
+
+=== own mRNA vs phospho-derived activity (Sugimoto's -0.02; unit = TF-timepoint)
+  own mRNA log2FC vs corrected    n= 51  spearman -0.170 [-0.45,+0.13]   pearson -0.393 [-0.66,-0.09]
+  own mRNA log2FC vs uncorrected  n= 57  spearman -0.038 [-0.34,+0.25]   pearson -0.148 [-0.49,+0.07]
+  own mRNA log2FC vs own PROTEIN log2FC   n= 51  spearman +0.039   pearson -0.162  <- a positive value here makes the corrected own-mRNA correlation negative by construction
+
+panel TFs (sites quantified): CTNNB1:2, EZH2:2, FOS:1, GATA2:1, HDAC1:2, HDAC5:1, JUN:2, MECP2:1, MEF2D:1, NCOA3:1, NFATC4:2, NPM1:1, PML:2, RB1:2, RUNX1:1, SMAD1:2, STAT1:1, WWTR1:1, YAP1:7
+
+masked-ULM Spearman CI half-width 0.329 at 19 TFs; CI width scales as 1/sqrt(n_TF), so +/-0.10 needs about 206 TFs (~11x this phosphoproteome's directional panel).
+panel TFs with a CollecTRI self-edge at tmin=5: 12 of 19 (CTNNB1, EZH2, FOS, GATA2, JUN, MEF2D, NCOA3, NFATC4, PML, RB1, RUNX1, STAT1); max |masked - self-edge-deleted| over the panel = 0.058

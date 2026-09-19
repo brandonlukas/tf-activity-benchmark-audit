@@ -1,0 +1,233 @@
+ulm            top10%=0.45 top5%=0.35
+ulm hub_corr (mean |score| vs TF-TF degree) = 0.63
+direction norm  alpha  top10  top5  better  worse  hub_corr
+       up  sum   0.50   0.57  0.47    0.59   0.37      0.85
+       up  sum   0.25   0.57  0.48    0.63   0.33      0.87
+     both  sum   0.25   0.55  0.44    0.58   0.38      0.92
+       up  sum   1.00   0.55  0.44    0.58   0.39      0.85
+       up  sum   2.00   0.54  0.43    0.57   0.41      0.84
+     both  sum   0.50   0.53  0.43    0.55   0.42      0.92
+     both  sum   1.00   0.53  0.42    0.53   0.46      0.92
+     both  sum   2.00   0.52  0.41    0.53   0.45      0.92
+       up mean   1.00   0.51  0.42    0.61   0.33      0.32
+       up mean   2.00   0.51  0.38    0.54   0.42      0.10
+       up mean   0.50   0.49  0.41    0.65   0.25      0.52
+     both mean   1.00   0.49  0.38    0.51   0.43      0.32
+     both mean   0.50   0.48  0.37    0.54   0.35      0.51
+       up mean   0.25   0.47  0.39    0.68   0.20      0.60
+     both mean   0.25   0.46  0.36    0.59   0.27      0.59
+     both mean   2.00   0.45  0.34    0.43   0.53      0.07
+     down mean   0.25   0.45  0.35    0.39   0.46      0.59
+     down mean   0.50   0.43  0.34    0.36   0.55      0.50
+     down  sum   0.25   0.42  0.28    0.43   0.53      0.80
+     down mean   1.00   0.41  0.29    0.32   0.62      0.29
+     down  sum   0.50   0.38  0.27    0.41   0.57      0.81
+     down  sum   1.00   0.35  0.23    0.38   0.61      0.82
+     down  sum   2.00   0.33  0.21    0.36   0.63      0.82
+     down mean   2.00   0.32  0.19    0.29   0.68      0.01
+
+variant                          top10  top5  better worse
+ulm                              0.45   0.35  0.00   0.00
+up sum a=0.5                     0.57   0.47  0.59   0.37
+up sum a=0.5 SHUF x10 mean       0.31   0.19  [0.28-0.33] [0.16-0.22]
+up mean a=1                      0.51   0.42  0.61   0.33
+up mean a=1 SHUF x10 mean        0.42   0.31  [0.41-0.43] [0.30-0.32]
+ulm + 0.5*own mRNA               0.66   0.56  0.91   0.01
+ulm + 1*own mRNA                 0.77   0.67  0.91   0.02
+ulm + 2*own mRNA                 0.94   0.86  0.89   0.03
+ulm + 1*own + up mean a=1        0.77   0.66  0.85   0.09
+
+variant (own mRNA masked)        top10  top5  better worse
+ulm                              0.34   0.28  0.00   0.00
+up sum a=0.5                     0.28   0.16  0.42   0.57
+up sum a=0.5 SHUF x10 mean       0.26   0.16  [0.24-0.27] [0.14-0.20]
+up mean a=1                      0.34   0.22  0.39   0.57
+up mean a=1 SHUF x10 mean        0.33   0.24  [0.31-0.35] [0.23-0.25]
+
+================================================================================================
+T-037 / F-026  does masked ULM detect the perturbed TF or the study?
+================================================================================================
+
+masked ULM, 907 experiments, 643 scored over 263 TFs, 766 scored TFs; filtered (logFC < -1) subset 279
+  masked top-10% on the filtered subset 0.344 (96/279), top-5% 0.280   [F-022/V-022: 0.344, 96/279, 0.280]
+  per-TF BASE RATE on the same rows 0.122 top-10%, 0.067 top-5% [V-022: 0.123] -- this is the reference line everywhere below, not 0.10
+  masked top-10% on all 643 scored 0.299 [V-022: 0.299], base rate 0.123
+
+------------------------------------------------------------------------------------------------
+(1) STUDY GROUPING. candidate obs columns
+  Profile.ID    646 values (466 among scored),  31 with >= 2 distinct perturbed TFs covering  139 scored experiments; placeholders 0
+  Pubmed.ID     287 values (264 among scored),  29 with >= 2 distinct perturbed TFs covering  344 scored experiments; placeholders 159
+  Data.Source     2 values (2 among scored),   2 with >= 2 distinct perturbed TFs covering  643 scored experiments; placeholders 0
+  -> Profile.ID (GEO series) is the study identifier; Pubmed.ID pools unrelated series behind placeholder ids, Data.Source is the repository name.
+  TFs per study over all 907 experiments: 1 TF(s): 600 studies, 2 TF(s): 29 studies, 3 TF(s): 11 studies, 7 TF(s): 2 studies, 8 TF(s): 1 studies, 12 TF(s): 1 studies, 19 TF(s): 1 studies, 78 TF(s): 1 studies
+  multi-TF studies 46, holding 155 scored experiments (24% of scored) over 101 TFs [V-022 lead: 155 experiments, 101 TFs, 45 studies]
+  of those, 77 are inside the filtered 279 [V-022: 77]
+
+------------------------------------------------------------------------------------------------
+(2) CORE COMPARISON, paired within study. masked ULM throughout.
+    (a) rank of TF t in its own experiment   vs   (b) rank of t in the same study's experiments on a different TF
+set                         n_exp  studies  pairs   own10  mate10   own5  mate5  ownMed  mateMed     d10       95% study-CI          95% TF-CI
+all scored (643)              155       45   3495   0.277   0.222  0.245  0.168   0.321    0.469  +0.056   [-0.016, +0.138]   [-0.022, +0.129]
+filtered logFC<-1              77       33    806   0.338   0.271  0.299  0.204   0.204    0.438  +0.067   [-0.039, +0.198]   [-0.031, +0.167]
+  reference: per-TF base rate 0.122; the same TFs' top-10% rate in OTHER studies all scored (643): 0.136, filtered logFC<-1: 0.131
+
+------------------------------------------------------------------------------------------------
+(3) CONTROL V-022 ASKED FOR: drop study-mate pairs with regulon Jaccard > 0.05
+  mean regulon Jaccard: study-mate EXPERIMENT pairs 0.024 (n=3495), study-mate TF pairs 0.015 (n=2518, V-022's 0.066 is this one), random TF pairs 0.021 [V-022: 0.024]
+  586 of 3495 experiment pairs (17%) and 259 of 2518 TF pairs (10%) exceed Jaccard 0.05
+  by study size: TF pairs from the largest study (GSE31912, 78 experiments) 0.013, TF pairs from every other multi-TF study 0.033 (n=312) -- the enrichment V-022 reported lives in the small deliberate studies, not in the big screen
+set                                     n_exp  studies  pairs   own10  mate10     d10       95% study-CI          95% TF-CI
+all scored (643), all mates               155       45   3495   0.277   0.222  +0.056   [-0.016, +0.138]   [-0.022, +0.129]
+all scored (643), Jaccard <= 0.05         114       29   2909   0.237   0.223  +0.014   [-0.078, +0.085]   [-0.056, +0.090]
+all scored (643), same rows, all mates    114       29   3423   0.237   0.240  -0.003   [-0.103, +0.064]   [-0.073, +0.072]
+filtered logFC<-1, all mates               77       33    806   0.338   0.271  +0.067   [-0.039, +0.198]   [-0.031, +0.167]
+filtered logFC<-1, Jaccard <= 0.05         54       21    609   0.259   0.277  -0.018   [-0.115, +0.094]   [-0.123, +0.085]
+filtered logFC<-1, same rows, all mates     54       21    762   0.259   0.302  -0.043   [-0.135, +0.070]   [-0.148, +0.064]
+  the third row of each block holds the experiments fixed and puts the high-overlap mates back,
+  so it separates which experiments survive the filter from what the filter does to the mate rate
+
+------------------------------------------------------------------------------------------------
+(4) WHAT DOES 'STUDY' CARRY? same comparison, grouping by each candidate.
+    the key contrast is the last row: same cell line, DIFFERENT study.
+grouping                            n_exp  groups   pairs   own10  mate10     d10       95% group-CI
+study (Profile.ID)                    155      45    3495   0.277   0.222  +0.056   [-0.016, +0.138]
+cell type (Biosample.Name)            441      80   26510   0.272   0.167  +0.105   [+0.072, +0.143]
+knockdown (Knock.Method)              640       6  252437   0.298   0.123  +0.175   [+0.155, +0.203]
+platform (Platform)                   610      39   70815   0.307   0.137  +0.169   [+0.122, +0.222]
+same cell line, DIFFERENT study       394      56   23061   0.266   0.151  +0.116   [+0.082, +0.160]
+same cell line, SAME study            153      43    3449   0.268   0.225  +0.043   [-0.035, +0.126]
+
+------------------------------------------------------------------------------------------------
+(5) STUDY-CONTROLLED BASELINE: hit = top-10% in its own experiment AND better rank there
+    than the same TF's rank in its study-mates' experiments (vs the MEDIAN mate, and vs the BEST mate).
+set                                 n_exp  naive10  vs median       95% study-CI  vs best       95% study-CI  naive5   vsMed5  baseline
+multi-TF studies, all scored          155    0.277      0.252     [0.187, 0.342]    0.174     [0.091, 0.299]   0.245    0.219     0.136
+multi-TF studies, filtered 279         77    0.338      0.325     [0.209, 0.456]    0.260     [0.157, 0.386]   0.299    0.286     0.132
+  for comparison the whole filtered set: masked ULM 0.344 (0.344), per-TF base rate 0.122 (0.123). Only 77/279 = 28% of the filtered experiments can be study-controlled at all.
+
+------------------------------------------------------------------------------------------------
+(CONTROL) degree-preserving shuffled TF-gene network, 5 seeds, masked matrix, same study pairing.
+  Not owed -- no variant here proposes a new scoring rule, they all re-count the same masked ULM scores;
+  the one number above the 0.344 baseline (0.338) is a row subset of it, not a method. Run anyway.
+  seed   own10  mate10      d10    own5  better   worse   (better/worse = shuffled vs real masked rank, 643 scored)
+     0   0.148   0.119   +0.030   0.077    0.37    0.63
+     1   0.084   0.106   -0.022   0.032    0.38    0.62
+     2   0.103   0.113   -0.010   0.065    0.37    0.63
+     3   0.071   0.085   -0.014   0.045    0.37    0.63
+     4   0.129   0.097   +0.032   0.039    0.35    0.65
+  real +0.056   shuffled mean +0.003 [-0.022, +0.032]
+
+================================================================================================
+(6) T-053  THE STUDY-CONTEXT LIFT, on IDENTICAL rows.  [ASYMMETRIC mask, F-026's convention]
+================================================================================================
+  set: 106 scored experiments in 24 studies over 78 TFs and 19 cell lines; 3360 within-study mate pairs, 1794 same-cell-different-study mate pairs; 52 of them inside the filtered 279
+  reference line: per-TF base rate on these rows 0.139 top-10% / 0.080 top-5% (global 0.122, T-038) -- never 0.10
+
+  top-10%, masked ULM (asymmetric), one rate per experiment, 106 rows
+contrast (a vs b)                                    a       b       d       95% study-CI          95% TF-CI
+own  vs  same-cell OTHER-study mate              0.245   0.163  +0.082   [+0.025, +0.189]   [-0.010, +0.169]  V-026: 0.245 / 0.163 / +0.082 [+0.027, +0.188]
+own  vs  WITHIN-study mate                       0.245   0.236  +0.009   [-0.070, +0.072]   [-0.076, +0.092]  V-026: 0.245 / 0.236 / +0.009 [-0.072, +0.071]
+LIFT: within-study mate  vs  other-study mate    0.236   0.163  +0.073   [-0.001, +0.191]   [+0.020, +0.129]  V-026: +0.073 [+0.001, +0.192] / [+0.018, +0.128]
+
+  top-5%, masked ULM (asymmetric), one rate per experiment, 106 rows
+contrast (a vs b)                                    a       b       d       95% study-CI          95% TF-CI
+own  vs  same-cell OTHER-study mate              0.217   0.106  +0.111   [+0.053, +0.225]   [+0.031, +0.184]  V-026: 0.245 / 0.163 / +0.082 [+0.027, +0.188]
+own  vs  WITHIN-study mate                       0.217   0.169  +0.048   [-0.015, +0.107]   [-0.027, +0.119]  V-026: 0.245 / 0.236 / +0.009 [-0.072, +0.071]
+LIFT: within-study mate  vs  other-study mate    0.169   0.106  +0.063   [+0.012, +0.156]   [+0.021, +0.111]  V-026: +0.073 [+0.001, +0.192] / [+0.018, +0.128]
+
+  reading: both arms share the judged row, so the lift is the study-context effect with TF identity,
+  cell line and row composition held fixed. Being in the same GEO series raises a TF's top-10% rate
+  from 0.163 to 0.236; being the TF that was actually perturbed raises it to 0.245.
+
+================================================================================================
+(7) T-054  SYMMETRIC MASK as the reporting convention: every perturbed TF's gene
+    zeroed in EVERY row, not only in the row where it was perturbed. One extra ULM run.
+    F-026's blocks above keep the ASYMMETRIC convention so their numbers do not move;
+    every block this touches is printed under both, labelled.
+================================================================================================
+  435 perturbed-TF genes zeroed in all 907 rows (347049 extra nonzero cells removed vs the asymmetric mask); masked/unmasked own-gene check is in the assert
+
+  BASELINE (the 0.344 number) under both conventions
+convention              filt10   filt5   all10  base10   base5  better   worse   (better/worse = vs asymmetric masked ULM, 643 scored)
+asymmetric (F-026)       0.344   0.280   0.299   0.122   0.067      --      --
+symmetric (T-054)        0.348   0.276   0.289   0.120   0.064    0.47    0.47   [V-026: 0.348 vs 0.344]
+
+  BLOCK (2) CORE COMPARISON under both conventions
+set / convention                          n_exp   own10  mate10   own5  mate5     d10       95% study-CI          95% TF-CI
+all scored (643), asymmetric                155   0.277   0.222  0.245  0.168  +0.056   [-0.016, +0.138]   [-0.022, +0.129]
+all scored (643), SYMMETRIC                 155   0.277   0.212  0.226  0.151  +0.066   [+0.003, +0.134]   [-0.010, +0.140]
+filtered logFC<-1, asymmetric                77   0.338   0.271  0.299  0.204  +0.067   [-0.039, +0.198]   [-0.031, +0.167]
+filtered logFC<-1, SYMMETRIC                 77   0.338   0.243  0.299  0.189  +0.095   [+0.005, +0.204]   [-0.005, +0.200]
+  [V-026: the asymmetry biases d DOWNWARD; symmetric core d +0.066 [+0.003, +0.134]]
+
+  BLOCK (4) the two cell-line rows that feed (6), under both conventions
+grouping / convention                     n_exp   pairs   own10  mate10     d10        95% cell-CI
+same cell, DIFFERENT study, asymmetric      394   23061   0.266   0.151  +0.116   [+0.082, +0.160]
+same cell, DIFFERENT study, SYMMETRIC       394   23061   0.256   0.142  +0.115   [+0.077, +0.170]
+same cell, SAME study, asymmetric           153    3449   0.268   0.225  +0.043   [-0.028, +0.115]
+same cell, SAME study, SYMMETRIC            153    3449   0.268   0.214  +0.053   [-0.013, +0.119]
+  [V-026: matching on cell line LOWERS d (0.141 -> 0.116), so the +0.116 row is the ordinary base-rate
+   contrast with cell-line composition held fixed, NOT a study-context estimate. (6) is the identified one.]
+
+  BLOCK (5) STUDY-CONTROLLED BASELINE under both conventions
+set / convention                          n_exp  naive10  vs median       95% study-CI  vs best       95% study-CI  baseline
+multi-TF, all scored, asymmetric            155    0.277      0.252     [0.187, 0.342]    0.174     [0.091, 0.299]     0.136
+multi-TF, all scored, SYMMETRIC             155    0.277      0.245     [0.185, 0.324]    0.168     [0.085, 0.299]     0.131
+multi-TF, filtered 279, asymmetric           77    0.338      0.325     [0.209, 0.456]    0.260     [0.157, 0.386]     0.132
+multi-TF, filtered 279, SYMMETRIC            77    0.338      0.312     [0.210, 0.431]    0.260     [0.143, 0.413]     0.126
+
+  BLOCK (6) THE LIFT under both conventions (the T-053 result)
+contrast / convention                                a       b       d       95% study-CI          95% TF-CI
+own vs other-study mate, asymmetric              0.245   0.163  +0.082   [+0.025, +0.189]   [-0.010, +0.169]  
+own vs within-study mate, asymmetric             0.245   0.236  +0.009   [-0.070, +0.072]   [-0.076, +0.092]  
+LIFT within vs other study, asymmetric           0.236   0.163  +0.073   [-0.001, +0.191]   [+0.020, +0.129]  
+own vs other-study mate, SYMMETRIC               0.255   0.145  +0.110   [+0.055, +0.206]   [+0.017, +0.197]  
+own vs within-study mate, SYMMETRIC              0.255   0.218  +0.036   [-0.049, +0.091]   [-0.042, +0.117]  
+LIFT within vs other study, SYMMETRIC            0.218   0.145  +0.073   [+0.019, +0.178]   [+0.020, +0.129]  
+  symmetric minus asymmetric on the LIFT: -0.000 (P6 predicted a move smaller than 0.020)
+  CAUTION on 'the CI excludes 0': the study-clustered lower bound on the lift sits ON zero under the
+  ASYMMETRIC mask (-0.0011 here, +0.001 in V-026's scratch -- the difference is bootstrap noise between two
+  implementations, not data). It excludes 0 under the SYMMETRIC mask (+0.019) and under
+  TF clustering in both. Quote the symmetric row; do not quote a knife-edge bound as if it were robust.
+  CONVENTION GOING FORWARD: SYMMETRIC. It is the honest one -- under the asymmetric mask a mate row
+  still carries the judged TF's own transcript, so the mate arm keeps an abundance channel the own arm
+  has had removed, which biases every own-vs-mate d DOWNWARD.
+
+================================================================================================
+(8) CONTROL T-053 OWES, which V-026 did not run: degree-preserving shuffled
+    TF-gene network (fulldose.py's shuffler), 10 seeds, on the 106-row lift specifically.
+    PREDICTED (P7) before running: the shuffled lift SHRINKS but SURVIVES, +0.03 to +0.05,
+    because series/batch structure is in the expression matrix, not in the network.
+================================================================================================
+seed   own10  within   other     LIFT   own10  within   other     LIFT  better   worse
+         --- asymmetric mask ---           --- SYMMETRIC mask ---      (sym shuffled vs sym real, 643)
+   0   0.142   0.111   0.143   -0.032   0.142   0.126   0.143   -0.017    0.38    0.62
+   1   0.104   0.098   0.112   -0.015   0.104   0.088   0.098   -0.010    0.37    0.63
+   2   0.113   0.100   0.090   +0.010   0.113   0.096   0.088   +0.008    0.37    0.63
+   3   0.085   0.094   0.106   -0.012   0.066   0.090   0.106   -0.016    0.37    0.63
+   4   0.151   0.095   0.088   +0.007   0.160   0.098   0.091   +0.008    0.38    0.62
+   5   0.094   0.097   0.089   +0.008   0.104   0.104   0.095   +0.009    0.36    0.64
+   6   0.094   0.155   0.100   +0.055   0.094   0.161   0.098   +0.063    0.38    0.62
+   7   0.038   0.082   0.086   -0.004   0.066   0.096   0.087   +0.009    0.37    0.63
+   8   0.132   0.121   0.104   +0.017   0.132   0.119   0.105   +0.015    0.38    0.62
+   9   0.094   0.067   0.100   -0.034   0.104   0.067   0.092   -0.025    0.39    0.61
+
+shuffled lift (mean over 10 seeds)                                   d       95% study-CI          95% TF-CI
+shuffled network, asymmetric                                    +0.000   [-0.011, +0.018]   [-0.013, +0.013]  per-seed [-0.034, +0.055]
+  real (same rows, same pairing), asymmetric                    +0.073   [-0.001, +0.191]   [+0.020, +0.129]
+shuffled network, SYMMETRIC                                     +0.004   [-0.007, +0.026]   [-0.009, +0.019]  per-seed [-0.025, +0.063]
+  real (same rows, same pairing), SYMMETRIC                     +0.073   [+0.019, +0.178]   [+0.020, +0.129]
+
+  fraction of the symmetric lift surviving the shuffle: 6%, with a CI covering 0 and a per-seed
+  range straddling it. P7 IS CONTRADICTED: the lift does NOT survive a degree-preserving shuffle, it dies
+  like the own-vs-mate gap did (+0.056 -> +0.003). So the study-context effect is NOT generic series/batch
+  variance that any TF-gene map of the right degree sequence would read out -- it runs THROUGH the real
+  regulons: inside a GEO series a TF's actual targets move together, which is a stronger and more
+  specific claim than the one predicted, and it is the same mechanism class the 0.344 baseline rests on.
+
+  ROUTE (V-026's language). This is TF-perturbing (knockTF), masked throughout, and it concerns
+  106 of 643 scored experiments (16%), 52 of them in the filtered 279. It does NOT move the
+  0.344 baseline, which stands; it does not license calling that baseline mostly study context, and it
+  says nothing about the 488 scored experiments with no study-mate at all. What it DOES license: on
+  the rows where the test is possible, being in the same GEO series is worth about as much to a TF's
+  score as being the TF that was perturbed, so a study-controlled baseline is the honest lower bound.
